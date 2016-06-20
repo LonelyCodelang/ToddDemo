@@ -130,6 +130,56 @@ namespace RedisDemoTest
             Assert.Equal("路飞1", value.Name);
         }
 
+        [Fact]
+        public void HashGetOneTest2()
+        {
+            List<Customer> list = new List<Customer>();
+            list.Add(new Customer() { id = 1, Name = "路飞", Age = 15, Address = "xxxxxx" });
+            list.Add(new Customer() { id = 2, Name = "路飞1", Age = 16, Address = "xxxxxx111111" });
+            list.Add(new Customer() { id = 3, Name = "路飞1", Age = 18, Address = "xxxxxx222222" });
+
+            helper.HashSet<Customer>("hakey3", list, new Func<Customer, string>(TestMothod));
+
+            List<RedisValue> listkey = new List<RedisValue>();
+            listkey.Add(1);
+            listkey.Add(2);
+
+            List<Customer> listValue = helper.GetHashKey<Customer>("hakey3", listkey);
+            Assert.Equal(listkey.Count, listValue.Count);
+        }
+
+        [Fact]
+        public void GetHashAllTest()
+        {
+            List<Customer> list = new List<Customer>();
+            list.Add(new Customer() { id = 1, Name = "路飞", Age = 15, Address = "xxxxxx" });
+            list.Add(new Customer() { id = 2, Name = "路飞1", Age = 16, Address = "xxxxxx111111" });
+            list.Add(new Customer() { id = 3, Name = "路飞1", Age = 18, Address = "xxxxxx222222" });
+
+            helper.HashSet<Customer>("hakey4", list, new Func<Customer, string>(TestMothod));
+
+
+            List<Customer> listValue = helper.HashGetAll<Customer>("hakey4");
+            Assert.Equal(list.Count, listValue.Count);
+        }
+
+
+        [Fact]
+        public void DeleteHaseTest()
+        {
+            List<Customer> list = new List<Customer>();
+            list.Add(new Customer() { id = 1, Name = "路飞", Age = 15, Address = "xxxxxx" });
+            list.Add(new Customer() { id = 2, Name = "路飞1", Age = 16, Address = "xxxxxx111111" });
+            list.Add(new Customer() { id = 3, Name = "路飞1", Age = 18, Address = "xxxxxx222222" });
+
+            helper.HashSet<Customer>("hakey5", list, new Func<Customer, string>(TestMothod));
+
+
+            helper.DeleteHase("hakey5", "2");
+            List<Customer> listValue = helper.HashGetAll<Customer>("hakey5");
+            Assert.Equal(list.Count - 1, listValue.Count);
+        }
+
         public string TestMothod(Customer item)
         {
             return item.id.ToString();

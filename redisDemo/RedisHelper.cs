@@ -158,7 +158,7 @@ namespace redisDemo
         }
 
         /// <summary>
-        /// 获取hashkey所有hash字段
+        /// 获取hashkey所有Redis key
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
@@ -172,6 +172,26 @@ namespace redisDemo
                 if (!item.IsNullOrEmpty)
                 {
                     result.Add(JsonConvert.DeserializeObject<T>(item));
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取hashkey所有的值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List<T> HashGetAll<T>(string key)
+        {
+            List<T> result = new List<T>();
+            HashEntry[] arr = db.HashGetAll(key);
+            foreach (var item in arr)
+            {
+                if (!item.Value.IsNullOrEmpty)
+                {
+                    result.Add(JsonConvert.DeserializeObject<T>(item.Value));
                 }
             }
             return result;
