@@ -92,6 +92,30 @@ namespace RedisDemoTest
 
         }
 
+        [Fact]
+        public void ttt()
+        {
+            //bool HashSet(RedisKey key, RedisValue hashField, RedisValue value, When when = When.Always, CommandFlags flags = CommandFlags.None);
+            db.HashSet("hashkey1", "name", "lily");
+            //void HashSet(RedisKey key, HashEntry[] hashFields, CommandFlags flags = CommandFlags.None);
+            db.HashSet("hashkey2", new HashEntry[] { new HashEntry("name", "lucy"), new HashEntry("age", 18) , new HashEntry("agex", 12) });
+
+
+            //2.1.2 get
+            //RedisValue HashGet(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None);
+            RedisValue rhashval = db.HashGet("hashkey1", "name");
+            //RedisValue[] HashGet(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None);
+            RedisValue[] rhashvals = db.HashGet("hashkey2", new RedisValue[] { "name", "age" });
+            RedisValue rhashva2 = db.HashGet("hashkey2", "name");
+            //HashEntry[] HashGetAll(RedisKey key, CommandFlags flags = CommandFlags.None);
+            HashEntry[] hashentitrys = db.HashGetAll("hashkey2");
+
+            //long HashIncrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None);
+            //double HashIncrement(RedisKey key, RedisValue hashField, double value, CommandFlags flags = CommandFlags.None);
+            db.HashIncrement("hashkey2", "age", 3);
+
+        }
+
 
         public void Dispose()
         {

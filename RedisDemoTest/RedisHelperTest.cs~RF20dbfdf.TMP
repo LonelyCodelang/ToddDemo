@@ -112,22 +112,8 @@ namespace RedisDemoTest
             list.Add(new Customer() { id = 2, Name = "路飞1", Age = 16, Address = "xxxxxx111111" });
             list.Add(new Customer() { id = 3, Name = "路飞1", Age = 18, Address = "xxxxxx222222" });
 
-            helper.HashSet<Customer>("hakey1", list, new Func<Customer, string>(TestMothod));
+            helper.HashSet<Customer>("hakey1", list, TestMothod);
 
-        }
-
-        [Fact]
-        public void HashGetOneTest()
-        {
-            List<Customer> list = new List<Customer>();
-            list.Add(new Customer() { id = 1, Name = "路飞", Age = 15, Address = "xxxxxx" });
-            list.Add(new Customer() { id = 2, Name = "路飞1", Age = 16, Address = "xxxxxx111111" });
-            list.Add(new Customer() { id = 3, Name = "路飞1", Age = 18, Address = "xxxxxx222222" });
-
-            helper.HashSet<Customer>("hakey2", list, new Func<Customer, string>(TestMothod));
-
-            Customer value = helper.GetHashKey<Customer>("hakey2", "2");
-            Assert.Equal("路飞1", value.Name);
         }
 
         public string TestMothod(Customer item)

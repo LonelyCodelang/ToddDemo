@@ -58,25 +58,12 @@ namespace redisDemo
         }
 
         /// <summary>
-        /// 保存一个集合
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key">Redis Key</param>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public bool SetKey<T>(string key, List<T> list, TimeSpan? expiry = default(TimeSpan?))
-        {
-            string json = JsonConvert.SerializeObject(list);
-            return db.StringSet(key, json, expiry);
-        }
-
-        /// <summary>
         /// 获取单个key的值
         /// </summary>
         /// <param name="key">Redis Key</param>
         /// <returns></returns>
 
-        public RedisValue GetKey(string key)
+        public RedisValue GetStringKey(string key)
         {
             return db.StringGet(key);
         }
@@ -92,6 +79,17 @@ namespace redisDemo
             return db.StringGet(listKey.ToArray());
         }
 
+        /// <summary>
+        /// 获取一个key的对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public T GetStringKey<T>(string key)
+        {
+            return JsonConvert.DeserializeObject<T>(db.StringGet(key));
+        }
+
 
         #endregion
 
@@ -104,14 +102,13 @@ namespace redisDemo
         /// <param name="key">Redis Key</param>
         /// <param name="list">数据集合</param>
         /// <param name="getModelId"></param>
-        public void HashSet<T>(string key, List<T> list, Func<T, String> getModelId)
+        public void HashSet<T>(string key, List<T> list, Func<T, string> getModelId)
         {
             List<HashEntry> listHashEntry = new List<HashEntry>();
             foreach (var item in list)
             {
-                string json = JsonConvert.SerializeObject(list);
-                string Hashkey = string.Format("{0}-{1}", key, getModelId);
-                listHashEntry.Add(new HashEntry(Hashkey, json));
+                string json = JsonConvert.SerializeObject(item);
+                listHashEntry.Add(new HashEntry(getModelId(item), json));
             }
             db.HashSet(key, listHashEntry.ToArray());
         }
