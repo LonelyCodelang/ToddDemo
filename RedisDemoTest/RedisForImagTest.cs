@@ -25,7 +25,7 @@ namespace RedisDemoTest
         [Fact]
         public void SaveImageTest()
         {
-            string[] DicFile = Directory.GetFiles(@"D:\TestFile\1");
+            string[] DicFile = Directory.GetFiles(@"D:\test\1\");
             int index = 0;
             foreach (var item in DicFile)
             {
@@ -36,7 +36,7 @@ namespace RedisDemoTest
                 helper.SetStringKey("img" + index, base64Img);
             }
 
-            string f1 = @"D:\TestFile\2\";
+            string f1 = @"D:\test\2\";
             for (int i = 1; i <= index; i++)
             {
                 string key = "img" + i;
