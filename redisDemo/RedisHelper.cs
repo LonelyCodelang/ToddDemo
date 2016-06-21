@@ -17,7 +17,7 @@ namespace redisDemo
             ConnectionMultiplexer conn = ConnectionMultiplexer.Connect(connstr);
             //  ConfigurationOptions options = ConfigurationOptions.Parse(connstr);
             //  string parsestr = options.ToString();
-            db = conn.GetDatabase(0);
+            db = conn.GetDatabase(1);//库概念0,1,2
         }
 
         #region String 可以设置过期时间

@@ -180,6 +180,17 @@ namespace RedisDemoTest
             Assert.Equal(list.Count - 1, listValue.Count);
         }
 
+        [Fact]
+        public void KeyExistsTest()
+        {
+            helper.SetStringKey("xxxd1", "dd");
+            bool value1 = helper.KeyExists("xxxd1");
+            Assert.True(value1);
+            bool value2 = helper.KeyExists("xxxd12");
+            Assert.False(value2);
+        }
+
+
         public string TestMothod(Customer item)
         {
             return item.id.ToString();

@@ -19,6 +19,8 @@ namespace QRCode
         static void Main(string[] args)
         {
             QrEncoder encoder = new QrEncoder();
+            
+
             QrCode qrCode;
             // byte[] byteArray = new byte[] { 34, 54, 90, 200 };
             string url = "http://www.yunfangdata.com";
@@ -30,7 +32,7 @@ namespace QRCode
             BitMatrix matrix = qrCode.Matrix;
             using (FileStream stream = new FileStream(@"D:\test\11111.jpg", FileMode.Create))
             {
-                gRender.WriteToStream(matrix, ImageFormat.Png, stream, new Point(1200, 1200));
+                gRender.WriteToStream(matrix, ImageFormat.Png, stream, new Point(600, 600));
             }
         }
 
