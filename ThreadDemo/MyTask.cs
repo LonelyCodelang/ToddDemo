@@ -35,7 +35,8 @@ namespace ThreadDemo
 
             //其实这两种方式都是一样的,Task.Factory 是对Task进行管理，调度管理这一类的
             Task t2 = Task.Factory.StartNew(MyMethodB);
-       
+
+            Task t3 = Task.Factory.StartNew(() => MyMethodC("测试"));
         }
 
 
@@ -59,6 +60,15 @@ namespace ThreadDemo
             for (int i = 0; i < 100; i++)
             {
                 Console.WriteLine("B++++++" + i);
+                Thread.Sleep(1000);
+            }
+        }
+
+        public void MyMethodC(string xx)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                Console.WriteLine(xx + "++++++" + i);
                 Thread.Sleep(1000);
             }
         }
