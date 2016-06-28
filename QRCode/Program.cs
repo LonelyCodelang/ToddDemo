@@ -14,12 +14,20 @@ namespace QRCode
 {
     class Program
     {
-        const string helloWorld = "Hello World!";
+
 
         static void Main(string[] args)
         {
+            GenerateLogoQr();
+        }
+
+        /// <summary>
+        /// 生成二维码
+        /// </summary>
+        public static void GenerateQr()
+        {
             QrEncoder encoder = new QrEncoder();
-            
+
 
             QrCode qrCode;
             // byte[] byteArray = new byte[] { 34, 54, 90, 200 };
@@ -36,6 +44,27 @@ namespace QRCode
             }
         }
 
+        /// <summary>
+        /// 生成带logo的二维码
+        /// </summary>
+        public static void GenerateLogoQr()
+        {
+            QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.M);
+            QrCode qrCode = qrEncoder.Encode("http://www.yunfangdata.com");
+            //保存成png文件
+            string filename = System.Environment.CurrentDirectory + "\\二维码.png"; //@"H:\桌面\截图\logo.png";
+            GraphicsRenderer render = new GraphicsRenderer(new FixedModuleSize(10, QuietZoneModules.Two), Brushes.Black, Brushes.White);
 
+            DrawingSize dSize = render.SizeCalculator.GetSize(qrCode.Matrix.Width);
+            Bitmap map = new Bitmap(dSize.CodeWidth, dSize.CodeWidth);
+            Graphics g = Graphics.FromImage(map);
+            render.Draw(g, qrCode.Matrix);
+            //追加Logo图片 ,注意控制Logo图片大小和二维码大小的比例
+            Image img = Image.FromFile(System.Environment.CurrentDirectory + "\\img\\logo2.png");
+
+            Point imgPoint = new Point((map.Width - img.Width) / 2, (map.Height - img.Height) / 2);
+            g.DrawImage(img, imgPoint.X, imgPoint.Y, img.Width, img.Height);
+            map.Save(filename, ImageFormat.Png);
+        }
     }
 }
