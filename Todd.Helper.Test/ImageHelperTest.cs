@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,7 +64,14 @@ namespace Todd.Helper.Test
 
             //ImageHelper.RotateAndSaveImage(imagePath, saveImagePath, 90);
 
-            ImageHelper.RotateImg1(new Bitmap(imagePath), 90, Color.Transparent).Save(saveImagePath,ImageFormat.Jpeg);
+            string[] files = Directory.GetFiles(@"D:\test\外采图片\三星\");
+            foreach (var item in files)
+            {
+                string newImg = @"D:\test\外采图片\三星\test\" + Guid.NewGuid().ToString() + ".jpg";
+                ImageHelper.RotateImg1(item, newImg, 90, Color.Transparent);
+            }
+
+
         }
     }
 }

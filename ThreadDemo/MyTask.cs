@@ -25,6 +25,8 @@ namespace ThreadDemo
 
 
             //Wait:等待方法执行完成才返回
+
+            Wait Task.WaitAll(t1, t2);
         }
 
         public void Run2()
