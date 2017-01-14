@@ -249,5 +249,151 @@ namespace Todd.Helper
         }
 
 
+        /// <summary>
+        /// 图片黑白处理
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Bitmap GrayImage(Bitmap bmp, int type)
+        {
+            int height = bmp.Height;
+            int width = bmp.Width;
+            Bitmap newbmp = new Bitmap(width, height);
+
+            LockBitmap lbmp = new LockBitmap(bmp);
+            LockBitmap newlbmp = new LockBitmap(newbmp);
+            lbmp.LockBits();
+            newlbmp.LockBits();
+
+            Color pixel;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    pixel = lbmp.GetPixel(x, y);
+                    int r, g, b, Result = 0;
+                    r = pixel.R;
+                    g = pixel.G;
+                    b = pixel.B;
+                    switch (type)
+                    {
+                        case 0://平均值法
+                            Result = ((r + g + b) / 3);
+                            break;
+                        case 1://最大值法
+                            Result = r > g ? r : g;
+                            Result = Result > b ? Result : b;
+                            break;
+                        case 2://加权平均值法
+                            Result = ((int)(0.3 * r) + (int)(0.59 * g) + (int)(0.11 * b));
+                            break;
+                    }
+                    newlbmp.SetPixel(x, y, Color.FromArgb(Result, Result, Result));
+                }
+            }
+            lbmp.UnlockBits();
+            newlbmp.UnlockBits();
+            return newbmp;
+        }
+
+
+        /// <summary>
+        /// 重新设置图片大小
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static Bitmap ResizeImage(Bitmap bmp, Size size)
+        {
+            Bitmap newbmp = new Bitmap(size.Width, size.Height);
+            using (Graphics g = Graphics.FromImage(newbmp))
+            {
+                g.DrawImage(bmp, new Rectangle(Point.Empty, size));
+            }
+            return newbmp;
+        }
+
+
+        /// <summary>
+        /// 底片效果（反色）
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <returns></returns>
+        public static Bitmap NegativeImage(Bitmap bmp)
+        {
+            int height = bmp.Height;
+            int width = bmp.Width;
+            Bitmap newbmp = new Bitmap(width, height);
+
+            LockBitmap lbmp = new LockBitmap(bmp);
+            LockBitmap newlbmp = new LockBitmap(newbmp);
+            lbmp.LockBits();
+            newlbmp.LockBits();
+
+            Color pixel;
+            for (int x = 1; x < width; x++)
+            {
+                for (int y = 1; y < height; y++)
+                {
+                    int r, g, b;
+                    pixel = lbmp.GetPixel(x, y);
+                    r = 255 - pixel.R;
+                    g = 255 - pixel.G;
+                    b = 255 - pixel.B;
+                    newlbmp.SetPixel(x, y, Color.FromArgb(r, g, b));
+                }
+            }
+            lbmp.UnlockBits();
+            newlbmp.UnlockBits();
+            return newbmp;
+        }
+
+        //浮雕
+        public static Bitmap EmbossmentImage(Bitmap bmp)
+        {
+            int height = bmp.Height;
+            int width = bmp.Width;
+            Bitmap newbmp = new Bitmap(width, height);
+
+            LockBitmap lbmp = new LockBitmap(bmp);
+            LockBitmap newlbmp = new LockBitmap(newbmp);
+            lbmp.LockBits();
+            newlbmp.LockBits();
+
+            Color pixel1, pixel2;
+            for (int x = 0; x < width - 1; x++)
+            {
+                for (int y = 0; y < height - 1; y++)
+                {
+                    int r = 0, g = 0, b = 0;
+                    pixel1 = lbmp.GetPixel(x, y);
+                    pixel2 = lbmp.GetPixel(x + 1, y + 1);
+                    r = Math.Abs(pixel1.R - pixel2.R + 128);
+                    g = Math.Abs(pixel1.G - pixel2.G + 128);
+                    b = Math.Abs(pixel1.B - pixel2.B + 128);
+                    if (r > 255)
+                        r = 255;
+                    if (r < 0)
+                        r = 0;
+                    if (g > 255)
+                        g = 255;
+                    if (g < 0)
+                        g = 0;
+                    if (b > 255)
+                        b = 255;
+                    if (b < 0)
+                        b = 0;
+                    newlbmp.SetPixel(x, y, Color.FromArgb(r, g, b));
+                }
+            }
+            lbmp.UnlockBits();
+            newlbmp.UnlockBits();
+            return newbmp;
+        }
+
+
+
+
     }
 }
