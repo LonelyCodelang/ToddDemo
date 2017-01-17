@@ -51,8 +51,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeFirstDbContext.cs" />
+    <Compile Include="DatabaseInitializer.cs" />
+    <Compile Include="DataConfigReseter.cs" />
+    <Compile Include="DataHelper.cs" />
     <Compile Include="DbContextBase.cs" />
+    <Compile Include="DbContextInitializer.cs" />
+    <Compile Include="DbContextInitializerBase.cs" />
+    <Compile Include="DbContextManager.cs" />
+    <Compile Include="DbContextTypeResolver.cs" />
+    <Compile Include="DefaultDbContext.cs" />
+    <Compile Include="Defaults\DefaultDbContext.cs" />
+    <Compile Include="Defaults\DefaultDbContextInitializer.cs" />
+    <Compile Include="EntityConfigurationBase.cs" />
+    <Compile Include="EntityMapperAssemblyFinder.cs" />
+    <Compile Include="Extensions\DbContextExtensions.cs" />
+    <Compile Include="Extensions\ServiceCollectionExtensions.cs" />
+    <Compile Include="IContextTypeResolver.cs" />
+    <Compile Include="IEntityMapper.cs" />
+    <Compile Include="IEntityMapperAssemblyFinder.cs" />
+    <Compile Include="Migrations\AutoMigrationsConfiguration.cs" />
+    <Compile Include="Migrations\CreateDatabaseIfNotExistsWithSeedBase.cs" />
+    <Compile Include="Migrations\ISeedAction.cs" />
+    <Compile Include="Migrations\MigrationsConfiguration.cs" />
+    <Compile Include="Migrations\MigrationsConfigurationBase.cs" />
+    <Compile Include="Migrations\MigrationsConfigurationWithSeedBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
