@@ -1,223 +1,75 @@
 ﻿// -----------------------------------------------------------------------
-//  <copyright file="DbContextBase.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2015 OSharp. All rights reserved.
+//  <copyright file="CodeFirstDbContext.cs" company="OSharp开源团队">
+//      Copyright (c) 2014 OSharp. All rights reserved.
 //  </copyright>
 //  <last-editor>郭明锋</last-editor>
-//  <last-date>2015-06-28 2:20</last-date>
+//  <last-date>2014-07-17 17:34</last-date>
 // -----------------------------------------------------------------------
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Data.Common;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
-using OSharp.Core.Configs;
-using OSharp.Core.Data;
-using OSharp.Data.Entity.Properties;
 using OSharp.Core.Logging;
 using OSharp.Utility.Exceptions;
 using OSharp.Utility.Extensions;
 using OSharp.Utility.Logging;
 
-using TransactionalBehavior = OSharp.Core.Data.TransactionalBehavior;
-
 
 namespace EfTest.Data.Entity
 {
     /// <summary>
-    /// 数据库上下文基类
+    /// EntityFramework-CodeFirst数据上下文
     /// </summary>
-    public abstract class DbContextBase<TDbContext> : DbContext, IUnitOfWork
-        where TDbContext : DbContext, IUnitOfWork, new()
+    public class CodeFirstDbContext : DbContext//, IUnitOfWork, IDependency
     {
-        protected readonly ILogger Logger = LogManager.GetLogger(typeof(TDbContext));
-        private static DbContextConfig _contextConfig;
-
-        #region 构造函数
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CodeFirstDbContext));
 
         /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
+        /// 初始化一个<see cref="CodeFirstDbContext"/>类型的新实例
         /// </summary>
-        protected DbContextBase()
-            : base(GetConnectionStringName())
+        public CodeFirstDbContext()
+            : this(GetConnectionStringName())
         { }
 
         /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
+        /// 使用连接名称或连接字符串 初始化一个<see cref="CodeFirstDbContext"/>类型的新实例
         /// </summary>
-        protected DbContextBase(DbCompiledModel model)
-            : base(model)
-        { }
-
-        /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
-        /// </summary>
-        protected DbContextBase(string nameOrConnectionString)
+        public CodeFirstDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         { }
 
         /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
+        /// 获取或设置 是否开启事务提交
         /// </summary>
-        protected DbContextBase(string nameOrConnectionString, DbCompiledModel model)
-            : base(nameOrConnectionString, model)
-        { }
+        public bool TransactionEnabled { get; set; }
 
         /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
+        /// 获取 数据库连接串名称
         /// </summary>
-        protected DbContextBase(DbConnection existingConnection, bool contextOwnsConnection)
-            : base(existingConnection, contextOwnsConnection)
-        { }
-
-        /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
-        /// </summary>
-        protected DbContextBase(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
-            : base(existingConnection, model, contextOwnsConnection)
-        { }
-
-        /// <summary>
-        /// 初始化一个<see cref="DbContextBase{TDbContext}"/>类型的新实例
-        /// </summary>
-        protected DbContextBase(ObjectContext objectContext, bool dbContextOwnsObjectContext)
-            : base(objectContext, dbContextOwnsObjectContext)
-        { }
-
-        #endregion
-
-        /// <summary>
-        /// 获取数据库连接字符串的名称
-        /// </summary>
-        /// <returns>数据库连接字符串对应的名称</returns>
+        /// <returns></returns>
         private static string GetConnectionStringName()
         {
-            DbContextConfig contextConfig = GetDbContextConfig();
-            if (contextConfig == null || !contextConfig.Enabled)
-            {
-                return typeof(TDbContext).ToString();
-            }
-            string name = contextConfig.ConnectionStringName;
-            if (ConfigurationManager.ConnectionStrings[name] == null)
-            {
-                throw new InvalidOperationException(Resources.DbContextBase_ConnectionStringNameNotExist.FormatWith(name));
-            }
+            string name = ConfigurationManager.AppSettings.Get("OSharp-ConnectionStringName") ?? "default";
             return name;
         }
 
         /// <summary>
-        /// 获取OSharp框架数据上下文配置
+        /// 获取 是否允许数据日志记录
         /// </summary>
-        /// <returns></returns>
-        private static DbContextConfig GetDbContextConfig()
-        {
-            return _contextConfig ?? (_contextConfig = OSharpConfig.Instance.DataConfig.ContextConfigs
-                .FirstOrDefault(m => m.ContextType == typeof(TDbContext)));
-        }
-
-        /// <summary>
-        /// 获取或设置 服务提供者
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; set; }
-
-        /// <summary>
-        /// 获取或设置 数据日志缓存
-        /// </summary>
-        public IDataLogCache DataLogCache { get; set; }
-
-        /// <summary>
-        /// 获取 是否允许数据库日志记录
-        /// </summary>
-        protected virtual bool DataLoggingEnabled
+        private static bool DataLoggingEnabled
         {
             get
             {
-                DbContextConfig contextConfig = GetDbContextConfig();
-                if (contextConfig == null || !contextConfig.Enabled)
-                {
-                    return false;
-                }
-                return contextConfig.DataLoggingEnabled;
-            }
-        }
-
-        /// <summary>
-        /// 在完成对派生上下文的模型的初始化后，并在该模型已锁定并用于初始化上下文之前，将调用此方法。虽然此方法的默认实现不执行任何操作，但可在派生类中重写此方法，这样便能在锁定模型之前对其进行进一步的配置。
-        /// </summary>
-        /// <param name="modelBuilder">定义要创建的上下文的模型的生成器。</param>
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //移除一对多的级联删除
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-
-            //注册实体配置信息
-            IEntityMapper[] entityMappers = DbContextManager.Instance.GetEntityMappers(typeof(TDbContext)).ToArray();
-            foreach (IEntityMapper mapper in entityMappers)
-            {
-                mapper.RegistTo(modelBuilder.Configurations);
-            }
-        }
-
-        #region Implementation of IUnitOfWork
-
-        /// <summary>
-        /// 获取 是否开启事务提交
-        /// </summary>
-        public bool TransactionEnabled
-        {
-            get { return Database.CurrentTransaction != null; }
-        }
-
-        /// <summary>
-        /// 显式开启数据上下文事务
-        /// </summary>
-        /// <param name="isolationLevel">指定连接的事务锁定行为</param>
-        public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.Unspecified)
-        {
-            if (Database.CurrentTransaction == null)
-            {
-                Database.BeginTransaction(isolationLevel);
-            }
-        }
-
-        /// <summary>
-        /// 提交事务的更改
-        /// </summary>
-        public void Commit()
-        {
-            DbContextTransaction transaction = Database.CurrentTransaction;
-            if (transaction != null)
-            {
-                try
-                {
-                    transaction.Commit();
-                }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 显式回滚事务，仅在显式开启事务后有用
-        /// </summary>
-        public void Rollback()
-        {
-            if (Database.CurrentTransaction != null)
-            {
-                Database.CurrentTransaction.Rollback();
+                return ConfigurationManager.AppSettings.Get("OSharp-DataLoggingEnabled").CastTo(false);
             }
         }
 
@@ -231,7 +83,7 @@ namespace EfTest.Data.Entity
         /// <param name="sql">命令字符串。</param>
         /// <param name="parameters">要应用于命令字符串的参数。</param>
         /// <returns>执行命令后由数据库返回的结果。</returns>
-        public virtual int ExecuteSqlCommand(TransactionalBehavior transactionalBehavior, string sql, params object[] parameters)
+        public int ExecuteSqlCommand(TransactionalBehavior transactionalBehavior, string sql, params object[] parameters)
         {
             System.Data.Entity.TransactionalBehavior behavior = transactionalBehavior == TransactionalBehavior.DoNotEnsureTransaction
                 ? System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction
@@ -250,7 +102,7 @@ namespace EfTest.Data.Entity
         /// <param name="sql">SQL 查询字符串。</param>
         /// <param name="parameters">要应用于 SQL 查询字符串的参数。 如果使用输出参数，则它们的值在完全读取结果之前不可用。 这是由于 DbDataReader 的基础行为而导致的，有关详细信息，请参见 http://go.microsoft.com/fwlink/?LinkID=398589。</param>
         /// <returns></returns>
-        public virtual IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters)
+        public IEnumerable<TElement> SqlQuery<TElement>(string sql, params object[] parameters)
         {
             return Database.SqlQuery<TElement>(sql, parameters);
         }
@@ -262,15 +114,13 @@ namespace EfTest.Data.Entity
         /// <param name="sql">SQL 查询字符串。</param>
         /// <param name="parameters">要应用于 SQL 查询字符串的参数。 如果使用输出参数，则它们的值在完全读取结果之前不可用。 这是由于 DbDataReader 的基础行为而导致的，有关详细信息，请参见 http://go.microsoft.com/fwlink/?LinkID=398589。</param>
         /// <returns></returns>
-        public virtual IEnumerable SqlQuery(Type elementType, string sql, params object[] parameters)
+        public IEnumerable SqlQuery(Type elementType, string sql, params object[] parameters)
         {
             return Database.SqlQuery(elementType, sql, parameters);
         }
 
-        #endregion
-
         /// <summary>
-        /// 提交当前单元操作的更改
+        /// 提交当前单元操作的更改。
         /// </summary>
         /// <returns>操作影响的行数</returns>
         public override int SaveChanges()
@@ -279,45 +129,28 @@ namespace EfTest.Data.Entity
         }
 
         /// <summary>
-        /// 提交当前单元操作的更改
+        /// 提交当前单元操作的更改。
         /// </summary>
         /// <param name="validateOnSaveEnabled">提交保存时是否验证实体约束有效性。</param>
         /// <returns>操作影响的行数</returns>
-        internal virtual int SaveChanges(bool validateOnSaveEnabled)
+        internal int SaveChanges(bool validateOnSaveEnabled)
         {
             bool isReturn = Configuration.ValidateOnSaveEnabled != validateOnSaveEnabled;
             try
             {
                 Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
                 //记录实体操作日志
-                List<DataLog> logs = new List<DataLog>();
+                List<DataLog>logs = new List<DataLog>();
                 if (DataLoggingEnabled)
                 {
-                    logs = this.GetEntityDataLogs(ServiceProvider).ToList();
+                    logs = this.GetEntityOperateLogs().ToList();
                 }
-                int count;
-                try
-                {
-                    count = base.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    IEnumerable<DbEntityValidationResult> errorResults = ex.EntityValidationErrors;
-                    List<string> ls = (from result in errorResults
-                                       let lines = result.ValidationErrors.Select(error => "{0}: {1}".FormatWith(error.PropertyName, error.ErrorMessage)).ToArray()
-                                       select "{0}({1})".FormatWith(result.Entry.Entity.GetType().FullName, lines.ExpandAndToString(", "))).ToList();
-                    string message = "数据验证引发异常——" + ls.ExpandAndToString(" | ");
-                    throw new DataException(message, ex);
-                }
+                int count = base.SaveChanges();
                 if (count > 0 && DataLoggingEnabled)
                 {
-                    foreach (DataLog log in logs)
-                    {
-                        DataLogCache.AddDataLog(log);
-                    }
-                    //Logger.Info(logs, true);
+                    Logger.Info(logs);
                 }
-                //TransactionEnabled = false;
+                TransactionEnabled = false;
                 return count;
             }
             catch (DbUpdateException e)
@@ -338,6 +171,7 @@ namespace EfTest.Data.Entity
                 }
             }
         }
+#if NET45
 
         /// <summary>
         /// 对数据库执行给定的 DDL/DML 命令。 
@@ -349,7 +183,7 @@ namespace EfTest.Data.Entity
         /// <param name="sql">命令字符串。</param>
         /// <param name="parameters">要应用于命令字符串的参数。</param>
         /// <returns>执行命令后由数据库返回的结果。</returns>
-        public virtual async Task<int> ExecuteSqlCommandAsync(TransactionalBehavior transactionalBehavior, string sql, params object[] parameters)
+        public async Task<int> ExecuteSqlCommandAsync(TransactionalBehavior transactionalBehavior, string sql, params object[] parameters)
         {
             System.Data.Entity.TransactionalBehavior behavior = transactionalBehavior == TransactionalBehavior.DoNotEnsureTransaction
                 ? System.Data.Entity.TransactionalBehavior.DoNotEnsureTransaction
@@ -371,7 +205,7 @@ namespace EfTest.Data.Entity
         /// </summary>
         /// <param name="validateOnSaveEnabled">提交保存时是否验证实体约束有效性。</param>
         /// <returns>操作影响的行数</returns>
-        internal virtual async Task<int> SaveChangesAsync(bool validateOnSaveEnabled)
+        internal async Task<int> SaveChangesAsync(bool validateOnSaveEnabled)
         {
             bool isReturn = Configuration.ValidateOnSaveEnabled != validateOnSaveEnabled;
             try
@@ -381,31 +215,14 @@ namespace EfTest.Data.Entity
                 List<DataLog> logs = new List<DataLog>();
                 if (DataLoggingEnabled)
                 {
-                    logs = (await this.GetEntityOperateLogsAsync(ServiceProvider)).ToList();
+                    logs = (await this.GetEntityOperateLogsAsync()).ToList();
                 }
-                int count = 0;
-                try
-                {
-                    count = await base.SaveChangesAsync();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    IEnumerable<DbEntityValidationResult> errorResults = ex.EntityValidationErrors;
-                    List<string> ls = (from result in errorResults
-                                       let lines = result.ValidationErrors.Select(error => "{0}: {1}".FormatWith(error.PropertyName, error.ErrorMessage)).ToArray()
-                                       select "{0}({1})".FormatWith(result.Entry.Entity.GetType().FullName, lines.ExpandAndToString(", "))).ToList();
-                    string message = "数据验证引发异常——" + ls.ExpandAndToString(" | ");
-                    throw new DataException(message, ex);
-                }
+                int count = await base.SaveChangesAsync();
                 if (count > 0 && DataLoggingEnabled)
                 {
-                    foreach (DataLog log in logs)
-                    {
-                        DataLogCache.AddDataLog(log);
-                    }
-                    //Logger.Info(logs, true);
+                    Logger.Info(logs);
                 }
-                //TransactionEnabled = false;
+                TransactionEnabled = false;
                 return count;
             }
             catch (DbUpdateException e)
@@ -424,6 +241,19 @@ namespace EfTest.Data.Entity
                 {
                     Configuration.ValidateOnSaveEnabled = !validateOnSaveEnabled;
                 }
+            }
+        }
+#endif
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //移除一对多的级联删除
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+            //注册实体配置信息
+            ICollection<IEntityMapper> entityMappers = DatabaseInitializer.EntityMappers;
+            foreach (IEntityMapper mapper in entityMappers)
+            {
+                mapper.RegistTo(modelBuilder.Configurations);
             }
         }
     }
