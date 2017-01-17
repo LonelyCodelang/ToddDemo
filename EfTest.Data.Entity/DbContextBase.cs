@@ -6,6 +6,8 @@
 //  <last-date>2015-06-28 2:20</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core;
+using OSharp.Core.Configs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,15 +23,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-using OSharp.Core.Configs;
-using OSharp.Core.Data;
-using OSharp.Data.Entity.Properties;
-using OSharp.Core.Logging;
-using OSharp.Utility.Exceptions;
-using OSharp.Utility.Extensions;
-using OSharp.Utility.Logging;
 
-using TransactionalBehavior = OSharp.Core.Data.TransactionalBehavior;
+
+using TransactionalBehavior = EfTest.Core.TransactionalBehavior;
 
 
 namespace EfTest.Data.Entity
@@ -40,7 +36,7 @@ namespace EfTest.Data.Entity
     public abstract class DbContextBase<TDbContext> : DbContext, IUnitOfWork
         where TDbContext : DbContext, IUnitOfWork, new()
     {
-        protected readonly ILogger Logger = LogManager.GetLogger(typeof(TDbContext));
+      //  protected readonly ILogger Logger = LogManager.GetLogger(typeof(TDbContext));
         private static DbContextConfig _contextConfig;
 
         #region 构造函数
@@ -133,7 +129,7 @@ namespace EfTest.Data.Entity
         /// <summary>
         /// 获取或设置 数据日志缓存
         /// </summary>
-        public IDataLogCache DataLogCache { get; set; }
+       // public IDataLogCache DataLogCache { get; set; } // helang log
 
         /// <summary>
         /// 获取 是否允许数据库日志记录
@@ -289,12 +285,12 @@ namespace EfTest.Data.Entity
             try
             {
                 Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
-                //记录实体操作日志
-                List<DataLog> logs = new List<DataLog>();
-                if (DataLoggingEnabled)
-                {
-                    logs = this.GetEntityDataLogs(ServiceProvider).ToList();
-                }
+                //记录实体操作日志  helang
+               // List<DataLog> logs = new List<DataLog>();
+                //if (DataLoggingEnabled)
+                //{
+                //    logs = this.GetEntityDataLogs(ServiceProvider).ToList();
+                //}
                 int count;
                 try
                 {
@@ -309,15 +305,15 @@ namespace EfTest.Data.Entity
                     string message = "数据验证引发异常——" + ls.ExpandAndToString(" | ");
                     throw new DataException(message, ex);
                 }
-                if (count > 0 && DataLoggingEnabled)
-                {
-                    foreach (DataLog log in logs)
-                    {
-                        DataLogCache.AddDataLog(log);
-                    }
-                    //Logger.Info(logs, true);
-                }
-                //TransactionEnabled = false;
+                //if (count > 0 && DataLoggingEnabled)
+                //{
+                //    foreach (DataLog log in logs)
+                //    {
+                //        DataLogCache.AddDataLog(log);
+                //    }
+                  
+                //}
+             
                 return count;
             }
             catch (DbUpdateException e)
@@ -326,7 +322,7 @@ namespace EfTest.Data.Entity
                 {
                     SqlException sqlEx = e.InnerException.InnerException as SqlException;
                     string msg = DataHelper.GetSqlExceptionMessage(sqlEx.Number);
-                    throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);
+                  //  throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);  // helang
                 }
                 throw;
             }
@@ -358,13 +354,13 @@ namespace EfTest.Data.Entity
         }
 
         /// <summary>
-        /// 异步提交当前单元操作的更改。
+        /// 异步提交当前单元操作的更改。 helang
         /// </summary>
         /// <returns>操作影响的行数</returns>
-        public override Task<int> SaveChangesAsync()
-        {
-            return SaveChangesAsync(true);
-        }
+        //public override Task<int> SaveChangesAsync()
+        //{
+        //    return SaveChangesAsync(true);
+        //}
 
         /// <summary>
         /// 提交当前单元操作的更改。
@@ -377,12 +373,12 @@ namespace EfTest.Data.Entity
             try
             {
                 Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
-                //记录实体操作日志
-                List<DataLog> logs = new List<DataLog>();
-                if (DataLoggingEnabled)
-                {
-                    logs = (await this.GetEntityOperateLogsAsync(ServiceProvider)).ToList();
-                }
+                //记录实体操作日志  helang
+                //List<DataLog> logs = new List<DataLog>(); 
+                //if (DataLoggingEnabled)
+                //{
+                //    logs = (await this.GetEntityOperateLogsAsync(ServiceProvider)).ToList();
+                //}
                 int count = 0;
                 try
                 {
@@ -397,15 +393,15 @@ namespace EfTest.Data.Entity
                     string message = "数据验证引发异常——" + ls.ExpandAndToString(" | ");
                     throw new DataException(message, ex);
                 }
-                if (count > 0 && DataLoggingEnabled)
-                {
-                    foreach (DataLog log in logs)
-                    {
-                        DataLogCache.AddDataLog(log);
-                    }
-                    //Logger.Info(logs, true);
-                }
-                //TransactionEnabled = false;
+                //if (count > 0 && DataLoggingEnabled)
+                //{
+                //    foreach (DataLog log in logs)
+                //    {
+                //        DataLogCache.AddDataLog(log);
+                //    }
+                  
+                //}
+                
                 return count;
             }
             catch (DbUpdateException e)
@@ -414,7 +410,7 @@ namespace EfTest.Data.Entity
                 {
                     SqlException sqlEx = e.InnerException.InnerException as SqlException;
                     string msg = DataHelper.GetSqlExceptionMessage(sqlEx.Number);
-                    throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);
+                   // throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx); // helang
                 }
                 throw;
             }

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,24 +30,118 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\EntityBase.cs" />
-    <Compile Include="Data\IRepository.cs" />
-    <Compile Include="Data\IUnitOfWork.cs" />
+    <Compile Include="Configs\ConfigFile\Data\ContextCollection.cs" />
+    <Compile Include="Configs\ConfigFile\Data\ContextElement.cs" />
+    <Compile Include="Configs\ConfigFile\Data\CreateDatabaseInitializerElement.cs" />
+    <Compile Include="Configs\ConfigFile\Data\DataElement.cs" />
+    <Compile Include="Configs\ConfigFile\Data\DbContextInitializerElement.cs" />
+    <Compile Include="Configs\DataConfig.cs" />
+    <Compile Include="Configs\DbContextConfig.cs" />
+    <Compile Include="Configs\DbContextInitializerConfig.cs" />
+    <Compile Include="Configs\IDataConfigReseter.cs" />
+    <Compile Include="Data\AnyRadixConvert.cs" />
+    <Compile Include="Data\CheckExistsType.cs" />
+    <Compile Include="Data\CombHelper.cs" />
+    <Compile Include="Data\Compression.cs" />
+    <Compile Include="Data\DateTimeRange.cs" />
+    <Compile Include="Data\IOSharpResult.cs" />
+    <Compile Include="Data\JsonHelper.cs" />
+    <Compile Include="Data\MathExpression.cs" />
+    <Compile Include="Data\MathHelper.cs" />
+    <Compile Include="Data\OperationResult.cs" />
+    <Compile Include="Data\OperationResultType.cs" />
+    <Compile Include="Data\OSharpResult.cs" />
+    <Compile Include="Data\PageCondition.cs" />
+    <Compile Include="Data\RegexPatterns.cs" />
+    <Compile Include="Data\SerializeHelper.cs" />
+    <Compile Include="Data\Singleton.cs" />
+    <Compile Include="Data\SingletonDictionary.cs" />
+    <Compile Include="Data\SingletonList.cs" />
+    <Compile Include="Data\SortCondition.cs" />
+    <Compile Include="Dependency\IDependency.cs" />
+    <Compile Include="Dependency\IScopeDependency.cs" />
+    <Compile Include="EntityBase.cs" />
+    <Compile Include="ExpirableBase.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\BooleanExtensions.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\CollectionExtensions.Part.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\ExpressionExtensions.cs" />
+    <Compile Include="Extensions\LinqToXmlExtensions.cs" />
+    <Compile Include="Extensions\MemoryCacheExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\ParamterCheckExtensions.cs" />
+    <Compile Include="Extensions\RandomExtensions.cs" />
+    <Compile Include="Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\ThreadExtensions.cs" />
+    <Compile Include="Extensions\TryCatchExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Filter\CollectionPropertySorter.cs" />
+    <Compile Include="Filter\DataPage.cs" />
+    <Compile Include="Filter\FilterGroup.cs" />
+    <Compile Include="Filter\FilterHelper.cs" />
+    <Compile Include="Filter\FilterOperate.cs" />
+    <Compile Include="Filter\FilterRule.cs" />
+    <Compile Include="Filter\OperateCodeAttribute.cs" />
+    <Compile Include="IEntity.cs" />
+    <Compile Include="IEntityDto.cs" />
+    <Compile Include="Infrastructure\IAudited.cs" />
+    <Compile Include="Infrastructure\ICreatedAudited.cs" />
+    <Compile Include="Infrastructure\ICreatedTime.cs" />
+    <Compile Include="Infrastructure\IExpirable.cs" />
+    <Compile Include="Infrastructure\ILockable.cs" />
+    <Compile Include="Infrastructure\IRecyclable.cs" />
+    <Compile Include="Infrastructure\ITimestamp.cs" />
+    <Compile Include="Infrastructure\IUpdateAutited.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionalBehavior.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Configs\ConfigFile\osharp.config" />
+    <None Include="Configs\ConfigFile\osharp.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
