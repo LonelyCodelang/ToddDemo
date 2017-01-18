@@ -22,7 +22,7 @@ namespace EfTest.Data.Entity
     /// <summary>
     /// 数据库初始化器，从程序集中反射实体映射类并加载到相应上下文类中，进行上下文类型的初始化
     /// </summary>
-    public class DatabaseInitializer :IDatabaseInitializer
+    public class DatabaseInitializer : IDatabaseInitializer
     {
         /// <summary>
         /// 获取或设置 实体映射程序集查找器
@@ -36,7 +36,7 @@ namespace EfTest.Data.Entity
         public virtual void Initialize(DataConfig config)
         {
             //没有上下文，添加默认上下文
-            if (!config.ContextConfigs.Any())
+            if (config == null || !config.ContextConfigs.Any())
             {
                 DbContextConfig contextConfig = GetDefaultDbContextConfig();
                 config.ContextConfigs.Add(contextConfig);
@@ -93,7 +93,7 @@ namespace EfTest.Data.Entity
             if (initializer == null)
             {
                 //helang
-               // throw new InvalidOperationException(Resources.DatabaseInitializer_TypeNotDatabaseInitializer.FormatWith(initializerType));
+                // throw new InvalidOperationException(Resources.DatabaseInitializer_TypeNotDatabaseInitializer.FormatWith(initializerType));
             }
             foreach (Assembly mapperAssembly in config.EntityMapperAssemblies)
             {
