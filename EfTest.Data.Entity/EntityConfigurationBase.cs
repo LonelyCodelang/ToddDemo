@@ -6,11 +6,11 @@
 //  <last-date>2014-07-16 23:38</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core;
 using System;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Configuration;
 
-using OSharp.Core.Data;
 
 
 namespace EfTest.Data.Entity

@@ -6,6 +6,7 @@
 //  <last-date>2015-06-28 16:07</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,10 +19,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-using OSharp.Core.Data;
-using OSharp.Data.Entity.Migrations;
-using OSharp.Data.Entity.Properties;
-using OSharp.Utility.Extensions;
 
 
 namespace EfTest.Data.Entity
@@ -133,7 +130,8 @@ namespace EfTest.Data.Entity
         {
             if (MapperAssemblies.Count == 0)
             {
-                throw new InvalidOperationException(Resources.DbContextInitializerBase_MapperAssembliesIsEmpty.FormatWith(this.GetType().FullName));
+                //helang
+               // throw new InvalidOperationException(Resources.DbContextInitializerBase_MapperAssembliesIsEmpty.FormatWith(this.GetType().FullName));
             }
             Type baseType = typeof(IEntityMapper);
             Type[] mapperTypes = MapperAssemblies.SelectMany(assembly => assembly.GetTypes())

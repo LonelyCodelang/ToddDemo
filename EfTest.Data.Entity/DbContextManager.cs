@@ -10,12 +10,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-
-using OSharp.Core.Data;
-using OSharp.Data.Entity.Properties;
-using OSharp.Utility;
-using OSharp.Utility.Extensions;
-
+using EfTest.Core;
+using EfTest.Data.Entity.Properties;
 
 namespace EfTest.Data.Entity
 {

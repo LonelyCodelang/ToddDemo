@@ -12,7 +12,7 @@ using System.Linq;
 
 
 
-namespace OSharp.Core.Configs
+namespace EfTest.Core.Configs
 {
     /// <summary>
     /// 数据配置信息

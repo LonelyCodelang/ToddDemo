@@ -62,19 +62,6 @@ namespace EfTest.Core
         int Insert(IEnumerable<TEntity> entities);
 
         /// <summary>
-        /// 以DTO为载体批量插入实体
-        /// </summary>
-        /// <typeparam name="TInputDto">添加DTO类型</typeparam>
-        /// <param name="dtos">添加DTO信息集合</param>
-        /// <param name="checkAction">添加信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        OperationResult Insert<TInputDto>(ICollection<TInputDto> dtos,
-            Action<TInputDto> checkAction = null,
-            Func<TInputDto, TEntity, TEntity> updateFunc = null)
-            where TInputDto : IInputDto<TKey>;
-
-        /// <summary>
         /// 逻辑删除实体
         /// </summary>
         /// <param name="entity">实体对象</param>
@@ -189,19 +176,6 @@ namespace EfTest.Core
         int Update(TEntity entity);
 
         /// <summary>
-        /// 以DTO为载体批量更新实体
-        /// </summary>
-        /// <typeparam name="TEditDto">更新DTO类型</typeparam>
-        /// <param name="dtos">更新DTO信息集合</param>
-        /// <param name="checkAction">更新信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        OperationResult Update<TEditDto>(ICollection<TEditDto> dtos,
-            Action<TEditDto, TEntity> checkAction = null,
-            Func<TEditDto, TEntity, TEntity> updateFunc = null)
-            where TEditDto : IInputDto<TKey>;
-
-        /// <summary>
         /// 直接更新指定编号的数据
         /// </summary>
         /// <param name="key">实体编号</param>
@@ -263,7 +237,7 @@ namespace EfTest.Core
         /// <param name="parameters">要应用于 SQL 查询字符串的参数。 如果使用输出参数，则它们的值在完全读取结果之前不可用。 这是由于 DbDataReader 的基础行为而导致的，有关详细信息，请参见 http://go.microsoft.com/fwlink/?LinkID=398589。</param>
         /// <returns></returns>
         IEnumerable<TEntity> SqlQuery(string sql, bool trackEnabled = true, params object[] parameters);
-#if NET45
+
         /// <summary>
         /// 异步插入实体
         /// </summary>
@@ -277,19 +251,6 @@ namespace EfTest.Core
         /// <param name="entities">实体对象集合</param>
         /// <returns>操作影响的行数</returns>
         Task<int> InsertAsync(IEnumerable<TEntity> entities);
-
-        /// <summary>
-        /// 异步以DTO为载体批量插入实体
-        /// </summary>
-        /// <typeparam name="TInputDto">添加DTO类型</typeparam>
-        /// <param name="dtos">添加DTO信息集合</param>
-        /// <param name="checkAction">添加信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        Task<OperationResult> InsertAsync<TInputDto>(ICollection<TInputDto> dtos,
-            Func<TInputDto, Task> checkAction = null,
-            Func<TInputDto, TEntity, Task<TEntity>> updateFunc = null)
-            where TInputDto : IInputDto<TKey>;
 
         /// <summary>
         /// 异步逻辑删除实体
@@ -405,18 +366,6 @@ namespace EfTest.Core
         /// <returns>操作影响的行数</returns>
         Task<int> UpdateAsync(TEntity entity);
 
-        /// <summary>
-        /// 异步以DTO为载体批量更新实体
-        /// </summary>
-        /// <typeparam name="TEditDto">更新DTO类型</typeparam>
-        /// <param name="dtos">更新DTO信息集合</param>
-        /// <param name="checkAction">更新信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        Task<OperationResult> UpdateAsync<TEditDto>(ICollection<TEditDto> dtos,
-            Func<TEditDto, TEntity, Task> checkAction = null,
-            Func<TEditDto, TEntity, Task<TEntity>> updateFunc = null)
-            where TEditDto : IInputDto<TKey>;
 
         /// <summary>
         /// 直接更新指定编号的数据
@@ -456,7 +405,7 @@ namespace EfTest.Core
         /// <returns>符合条件的实体集合</returns>
         [Obsolete("此API即将移除，请使用 TrackEntities 查询数据集 替换此方法的查询")]
         Task<IEnumerable<TEntity>> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate);
-
+#if NET45
 #endif
 
         #endregion

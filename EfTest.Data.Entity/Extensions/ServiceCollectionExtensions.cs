@@ -7,14 +7,13 @@
 //  <last-date>2015-10-10 11:49</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core;
+using EfTest.Core.Configs;
+using EfTest.Core.Dependency;
 using System;
 using System.Linq;
+using EfTest.Core.Extensions;
 
-using OSharp.Core.Configs;
-using OSharp.Core.Data;
-using OSharp.Core.Dependency;
-using OSharp.Data.Entity.Properties;
-using OSharp.Utility.Extensions;
 
 
 namespace EfTest.Data.Entity
@@ -42,7 +41,8 @@ namespace EfTest.Data.Entity
             {
                 if (!baseType.IsAssignableFrom(contextType))
                 {
-                    throw new InvalidOperationException(Resources.ContextTypeNotIUnitOfWorkType.FormatWith(contextType));
+                    //helang
+                    //throw new InvalidOperationException(Resources.ContextTypeNotIUnitOfWorkType.FormatWith(contextType));
                 }
                 services.AddScoped(baseType, contextType);
                 services.AddScoped(contextType);

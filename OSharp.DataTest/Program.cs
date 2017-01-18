@@ -10,6 +10,11 @@ namespace OSharp.DataTest
     {
         static void Main(string[] args)
         {
+            IServicesBuilder builder = new ServicesBuilder();
+            IServiceCollection services = builder.Build();
+            services.AddDataServices();
+            IFrameworkInitializer initializer = new FrameworkInitializer();
+            initializer.Initialize(new MvcAutofacIocBuilder(services));
         }
     }
 }

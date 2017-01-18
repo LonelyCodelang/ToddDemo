@@ -17,13 +17,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-using OSharp.Core.Data;
-using OSharp.Core.Data.Extensions;
-using OSharp.Core.Dependency;
-using OSharp.Core.Logging;
-using OSharp.Core.Security;
-using OSharp.Utility;
-
+using EfTest.Core;
+using EfTest.Core.Extensions;
 
 namespace EfTest.Data.Entity
 {
@@ -68,49 +63,49 @@ namespace EfTest.Data.Entity
         }
         
         /// <summary>
-        /// 获取数据上下文的变更日志信息
+        /// 获取数据上下文的变更日志信息 //helang
         /// </summary>
-        public static IEnumerable<DataLog> GetEntityDataLogs(this DbContext dbContext, IServiceProvider provider)
-        {
-            if (provider == null)
-            {
-                return Enumerable.Empty<DataLog>();
-            }
-            IEntityInfoHandler entityInfoHandler = provider.GetService<IEntityInfoHandler>();
-            if (entityInfoHandler == null)
-            {
-                return Enumerable.Empty<DataLog>();
-            }
+        //public static IEnumerable<DataLog> GetEntityDataLogs(this DbContext dbContext, IServiceProvider provider)
+        //{
+        //    if (provider == null)
+        //    {
+        //        return Enumerable.Empty<DataLog>();
+        //    }
+        //    IEntityInfoHandler entityInfoHandler = provider.GetService<IEntityInfoHandler>();
+        //    if (entityInfoHandler == null)
+        //    {
+        //        return Enumerable.Empty<DataLog>();
+        //    }
 
-            ObjectContext objectContext = ((IObjectContextAdapter)dbContext).ObjectContext;
-            ObjectStateManager manager = objectContext.ObjectStateManager;
+        //    ObjectContext objectContext = ((IObjectContextAdapter)dbContext).ObjectContext;
+        //    ObjectStateManager manager = objectContext.ObjectStateManager;
 
-            IEnumerable<DataLog> logs = from entry in manager.GetObjectStateEntries(EntityState.Added).Where(entry => entry.Entity != null)
-                let entityInfo = entityInfoHandler.GetEntityInfo(entry.Entity.GetType())
-                where entityInfo != null && entityInfo.DataLogEnabled
-                select GetAddedLog(entry, entityInfo);
+        //    IEnumerable<DataLog> logs = from entry in manager.GetObjectStateEntries(EntityState.Added).Where(entry => entry.Entity != null)
+        //        let entityInfo = entityInfoHandler.GetEntityInfo(entry.Entity.GetType())
+        //        where entityInfo != null && entityInfo.DataLogEnabled
+        //        select GetAddedLog(entry, entityInfo);
 
-            logs = logs.Concat(from entry in manager.GetObjectStateEntries(EntityState.Modified).Where(entry => entry.Entity != null)
-                let entityInfo = entityInfoHandler.GetEntityInfo(entry.Entity.GetType())
-                where entityInfo != null && entityInfo.DataLogEnabled
-                select GetModifiedLog(entry, entityInfo));
+        //    logs = logs.Concat(from entry in manager.GetObjectStateEntries(EntityState.Modified).Where(entry => entry.Entity != null)
+        //        let entityInfo = entityInfoHandler.GetEntityInfo(entry.Entity.GetType())
+        //        where entityInfo != null && entityInfo.DataLogEnabled
+        //        select GetModifiedLog(entry, entityInfo));
 
-            logs = logs.Concat(from entry in manager.GetObjectStateEntries(EntityState.Deleted).Where(entry => entry.Entity != null)
-                let entityInfo = entityInfoHandler.GetEntityInfo(entry.Entity.GetType())
-                where entityInfo != null && entityInfo.DataLogEnabled
-                select GetDeletedLog(entry, entityInfo));
+        //    logs = logs.Concat(from entry in manager.GetObjectStateEntries(EntityState.Deleted).Where(entry => entry.Entity != null)
+        //        let entityInfo = entityInfoHandler.GetEntityInfo(entry.Entity.GetType())
+        //        where entityInfo != null && entityInfo.DataLogEnabled
+        //        select GetDeletedLog(entry, entityInfo));
 
-            return logs;
-        }
+        //    return logs;
+        //}
 
         /// <summary>
         /// 异步获取数据上下文的变更日志信息
         /// </summary>
         /// <returns></returns>
-        public static async Task<IEnumerable<DataLog>> GetEntityOperateLogsAsync(this DbContext dbContext, IServiceProvider provider)
-        {
-            return await Task.FromResult(dbContext.GetEntityDataLogs(provider));
-        }
+        //public static async Task<IEnumerable<DataLog>> GetEntityOperateLogsAsync(this DbContext dbContext, IServiceProvider provider)
+        //{
+        //    return await Task.FromResult(dbContext.GetEntityDataLogs(provider));
+        //}
         
         /// <summary>
         /// 获取添加数据的日志信息
@@ -118,33 +113,33 @@ namespace EfTest.Data.Entity
         /// <param name="entry">实体状态跟踪信息</param>
         /// <param name="entityInfo">实体数据信息</param>
         /// <returns>新增数据日志信息</returns>
-        private static DataLog GetAddedLog(ObjectStateEntry entry, IEntityInfo entityInfo)
-        {
-            DataLog log = new DataLog(entityInfo.ClassName, entityInfo.Name, OperatingType.Insert);
-            for (int i = 0; i < entry.CurrentValues.FieldCount; i++)
-            {
-                string name = entry.CurrentValues.GetName(i);
-                if (name == "Timestamp")
-                {
-                    continue;
-                }
-                object value = entry.CurrentValues.GetValue(i);
-                if (name == "Id")
-                {
-                    log.EntityKey = value.ToString();
-                }
-                Type fieldType = entry.CurrentValues.GetFieldType(i);
-                DataLogItem logItem = new DataLogItem()
-                {
-                    Field = name,
-                    FieldName = entityInfo.PropertyNames[name],
-                    NewValue = value == null ? null : value.ToString(),
-                    DataType = fieldType == null ? null : fieldType.Name
-                };
-                log.LogItems.Add(logItem);
-            }
-            return log;
-        }
+        //private static DataLog GetAddedLog(ObjectStateEntry entry, IEntityInfo entityInfo)
+        //{
+        //    DataLog log = new DataLog(entityInfo.ClassName, entityInfo.Name, OperatingType.Insert);
+        //    for (int i = 0; i < entry.CurrentValues.FieldCount; i++)
+        //    {
+        //        string name = entry.CurrentValues.GetName(i);
+        //        if (name == "Timestamp")
+        //        {
+        //            continue;
+        //        }
+        //        object value = entry.CurrentValues.GetValue(i);
+        //        if (name == "Id")
+        //        {
+        //            log.EntityKey = value.ToString();
+        //        }
+        //        Type fieldType = entry.CurrentValues.GetFieldType(i);
+        //        DataLogItem logItem = new DataLogItem()
+        //        {
+        //            Field = name,
+        //            FieldName = entityInfo.PropertyNames[name],
+        //            NewValue = value == null ? null : value.ToString(),
+        //            DataType = fieldType == null ? null : fieldType.Name
+        //        };
+        //        log.LogItems.Add(logItem);
+        //    }
+        //    return log;
+        //}
 
         /// <summary>
         /// 获取修改数据的日志信息
@@ -152,39 +147,39 @@ namespace EfTest.Data.Entity
         /// <param name="entry">实体状态跟踪信息</param>
         /// <param name="entityInfo">实体数据信息</param>
         /// <returns>修改数据日志信息</returns>
-        private static DataLog GetModifiedLog(ObjectStateEntry entry, IEntityInfo entityInfo)
-        {
-            DataLog log = new DataLog(entityInfo.ClassName, entityInfo.Name, OperatingType.Update);
-            for (int i = 0; i < entry.CurrentValues.FieldCount; i++)
-            {
-                string name = entry.CurrentValues.GetName(i);
-                if (name == "Timestamp")
-                {
-                    continue;
-                }
-                object currentValue = entry.CurrentValues.GetValue(i);
-                object originalValue = entry.OriginalValues[name];
-                if (name == "Id")
-                {
-                    log.EntityKey = originalValue.ToString();
-                }
-                if (currentValue.Equals(originalValue))
-                {
-                    continue;
-                }
-                Type fieldType = entry.CurrentValues.GetFieldType(i);
-                DataLogItem logItem = new DataLogItem()
-                {
-                    Field = name,
-                    FieldName = entityInfo.PropertyNames[name],
-                    NewValue = currentValue == null ? null : currentValue.ToString(),
-                    OriginalValue = originalValue == null ? null : originalValue.ToString(),
-                    DataType = fieldType == null ? null : fieldType.Name
-                };
-                log.LogItems.Add(logItem);
-            }
-            return log;
-        }
+        //private static DataLog GetModifiedLog(ObjectStateEntry entry, IEntityInfo entityInfo)
+        //{
+        //    DataLog log = new DataLog(entityInfo.ClassName, entityInfo.Name, OperatingType.Update);
+        //    for (int i = 0; i < entry.CurrentValues.FieldCount; i++)
+        //    {
+        //        string name = entry.CurrentValues.GetName(i);
+        //        if (name == "Timestamp")
+        //        {
+        //            continue;
+        //        }
+        //        object currentValue = entry.CurrentValues.GetValue(i);
+        //        object originalValue = entry.OriginalValues[name];
+        //        if (name == "Id")
+        //        {
+        //            log.EntityKey = originalValue.ToString();
+        //        }
+        //        if (currentValue.Equals(originalValue))
+        //        {
+        //            continue;
+        //        }
+        //        Type fieldType = entry.CurrentValues.GetFieldType(i);
+        //        DataLogItem logItem = new DataLogItem()
+        //        {
+        //            Field = name,
+        //            FieldName = entityInfo.PropertyNames[name],
+        //            NewValue = currentValue == null ? null : currentValue.ToString(),
+        //            OriginalValue = originalValue == null ? null : originalValue.ToString(),
+        //            DataType = fieldType == null ? null : fieldType.Name
+        //        };
+        //        log.LogItems.Add(logItem);
+        //    }
+        //    return log;
+        //}
 
         /// <summary>
         /// 获取删除数据的日志信息
@@ -192,32 +187,32 @@ namespace EfTest.Data.Entity
         /// <param name="entry">实体状态跟踪信息</param>
         /// <param name="entityInfo">实体数据信息</param>
         /// <returns>删除数据日志信息</returns>
-        private static DataLog GetDeletedLog(ObjectStateEntry entry, IEntityInfo entityInfo)
-        {
-            DataLog log = new DataLog(entityInfo.ClassName, entityInfo.Name, OperatingType.Delete);
-            for (int i = 0; i < entry.OriginalValues.FieldCount; i++)
-            {
-                string name = entry.OriginalValues.GetName(i);
-                if (name == "Timestamp")
-                {
-                    continue;
-                }
-                object originalValue = entry.OriginalValues[i];
-                if (name == "Id")
-                {
-                    log.EntityKey = originalValue.ToString();
-                }
-                Type fieldType = entry.OriginalValues.GetFieldType(i);
-                DataLogItem logItem = new DataLogItem()
-                {
-                    Field = name,
-                    FieldName = entityInfo.PropertyNames[name],
-                    OriginalValue = originalValue == null ? null : originalValue.ToString(),
-                    DataType = fieldType == null ? null : fieldType.Name
-                };
-                log.LogItems.Add(logItem);
-            }
-            return log;
-        }
+        //private static DataLog GetDeletedLog(ObjectStateEntry entry, IEntityInfo entityInfo)
+        //{
+        //    DataLog log = new DataLog(entityInfo.ClassName, entityInfo.Name, OperatingType.Delete);
+        //    for (int i = 0; i < entry.OriginalValues.FieldCount; i++)
+        //    {
+        //        string name = entry.OriginalValues.GetName(i);
+        //        if (name == "Timestamp")
+        //        {
+        //            continue;
+        //        }
+        //        object originalValue = entry.OriginalValues[i];
+        //        if (name == "Id")
+        //        {
+        //            log.EntityKey = originalValue.ToString();
+        //        }
+        //        Type fieldType = entry.OriginalValues.GetFieldType(i);
+        //        DataLogItem logItem = new DataLogItem()
+        //        {
+        //            Field = name,
+        //            FieldName = entityInfo.PropertyNames[name],
+        //            OriginalValue = originalValue == null ? null : originalValue.ToString(),
+        //            DataType = fieldType == null ? null : fieldType.Name
+        //        };
+        //        log.LogItems.Add(logItem);
+        //    }
+        //    return log;
+        //}
     }
 }

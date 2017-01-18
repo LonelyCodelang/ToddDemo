@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfTest.Data.Entity", "EfTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSharp.DataTest", "OSharp.DataTest\OSharp.DataTest.csproj", "{69763DC5-4CDA-46DB-A364-2EC755436D5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfTest.Data.Entity.samples", "EfTest.Data.Entity.samples\EfTest.Data.Entity.samples.csproj", "{FB79BA78-1F0C-489D-876C-941E3AA67B5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{69763DC5-4CDA-46DB-A364-2EC755436D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69763DC5-4CDA-46DB-A364-2EC755436D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69763DC5-4CDA-46DB-A364-2EC755436D5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,5 +156,6 @@ Global
 		{8696C9E9-FEE3-47F1-93C0-C5A65EB7D518} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
 		{39575B2F-933B-4AAD-9FAC-C2645509C0CF} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
 		{69763DC5-4CDA-46DB-A364-2EC755436D5A} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
+		{FB79BA78-1F0C-489D-876C-941E3AA67B5A} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
 	EndGlobalSection
 EndGlobal

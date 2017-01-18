@@ -17,7 +17,7 @@ using System.Reflection;
 using EfTest.Core;
 
 
-namespace OSharp.Core.Configs
+namespace EfTest.Core.Configs
 {
     /// <summary>
     /// 数据上下文初始化配置

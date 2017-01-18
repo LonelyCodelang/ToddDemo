@@ -18,10 +18,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-using OSharp.Core.Logging;
-using OSharp.Utility.Exceptions;
-using OSharp.Utility.Extensions;
-using OSharp.Utility.Logging;
 
 
 namespace EfTest.Data.Entity
@@ -31,7 +27,7 @@ namespace EfTest.Data.Entity
     /// </summary>
     public class CodeFirstDbContext : DbContext//, IUnitOfWork, IDependency
     {
-        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CodeFirstDbContext));
+        //private static readonly ILogger Logger = LogManager.GetLogger(typeof(CodeFirstDbContext)); //helang
 
         /// <summary>
         /// 初始化一个<see cref="CodeFirstDbContext"/>类型的新实例
@@ -63,15 +59,15 @@ namespace EfTest.Data.Entity
         }
 
         /// <summary>
-        /// 获取 是否允许数据日志记录
+        /// 获取 是否允许数据日志记录 //helang
         /// </summary>
-        private static bool DataLoggingEnabled
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings.Get("OSharp-DataLoggingEnabled").CastTo(false);
-            }
-        }
+        //private static bool DataLoggingEnabled
+        //{
+        //    get
+        //    {
+        //        return ConfigurationManager.AppSettings.Get("OSharp-DataLoggingEnabled").CastTo(false);
+        //    }
+        //}
 
         /// <summary>
         /// 对数据库执行给定的 DDL/DML 命令。 
@@ -139,17 +135,17 @@ namespace EfTest.Data.Entity
             try
             {
                 Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
-                //记录实体操作日志
-                List<DataLog>logs = new List<DataLog>();
-                if (DataLoggingEnabled)
-                {
-                    logs = this.GetEntityOperateLogs().ToList();
-                }
+                //记录实体操作日志 //helang
+                //List<DataLog>logs = new List<DataLog>();
+                //if (DataLoggingEnabled)
+                //{
+                //    logs = this.GetEntityOperateLogs().ToList();
+                //}
                 int count = base.SaveChanges();
-                if (count > 0 && DataLoggingEnabled)
-                {
-                    Logger.Info(logs);
-                }
+                //if (count > 0 && DataLoggingEnabled)
+                //{
+                //    Logger.Info(logs);
+                //}
                 TransactionEnabled = false;
                 return count;
             }
@@ -159,7 +155,7 @@ namespace EfTest.Data.Entity
                 {
                     SqlException sqlEx = e.InnerException.InnerException as SqlException;
                     string msg = DataHelper.GetSqlExceptionMessage(sqlEx.Number);
-                    throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);
+                  //  throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);//helang
                 }
                 throw;
             }
@@ -249,12 +245,12 @@ namespace EfTest.Data.Entity
             //移除一对多的级联删除
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
-            //注册实体配置信息
-            ICollection<IEntityMapper> entityMappers = DatabaseInitializer.EntityMappers;
-            foreach (IEntityMapper mapper in entityMappers)
-            {
-                mapper.RegistTo(modelBuilder.Configurations);
-            }
+            //注册实体配置信息 helang
+            //ICollection<IEntityMapper> entityMappers = DatabaseInitializer.EntityMappers;
+            //foreach (IEntityMapper mapper in entityMappers)
+            //{
+            //    mapper.RegistTo(modelBuilder.Configurations);
+            //}
         }
     }
 }

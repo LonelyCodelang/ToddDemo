@@ -7,13 +7,10 @@
 //  <last-date>2015-08-02 15:53</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core;
+using EfTest.Core.Dependency;
 using System;
 
-using OSharp.Core.Data;
-using OSharp.Data.Entity.Properties;
-using OSharp.Core.Dependency;
-using OSharp.Utility;
-using OSharp.Utility.Extensions;
 
 
 namespace EfTest.Data.Entity
@@ -58,7 +55,8 @@ namespace EfTest.Data.Entity
             IUnitOfWork unitOfWork = (IUnitOfWork)_resolver.Resolve(contextType);
             if (unitOfWork == null)
             {
-                throw new InvalidOperationException(Resources.DbContextTypeResolver_DbContextResolveFailed.FormatWith(entityType, contextType));
+                //helang
+               // throw new InvalidOperationException(Resources.DbContextTypeResolver_DbContextResolveFailed.FormatWith(entityType, contextType));
             }
             return unitOfWork;
         }

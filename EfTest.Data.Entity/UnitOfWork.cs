@@ -1,14 +1,11 @@
-﻿using System;
+﻿using EfTest.Core.Utility;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using OSharp.Core.Data;
-using OSharp.Utility;
-
 
 namespace EfTest.Data.Entity
 {

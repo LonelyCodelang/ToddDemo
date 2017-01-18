@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EfTest.Core</RootNamespace>
     <AssemblyName>EfTest.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -58,10 +58,12 @@
     <Compile Include="Configs\ConfigFile\Data\CreateDatabaseInitializerElement.cs" />
     <Compile Include="Configs\ConfigFile\Data\DataElement.cs" />
     <Compile Include="Configs\ConfigFile\Data\DbContextInitializerElement.cs" />
+    <Compile Include="Configs\ConfigFile\OSharpFrameworkSection.cs" />
     <Compile Include="Configs\DataConfig.cs" />
     <Compile Include="Configs\DbContextConfig.cs" />
     <Compile Include="Configs\DbContextInitializerConfig.cs" />
     <Compile Include="Configs\IDataConfigReseter.cs" />
+    <Compile Include="Configs\OSharpConfig.cs" />
     <Compile Include="Data\AnyRadixConvert.cs" />
     <Compile Include="Data\CheckExistsType.cs" />
     <Compile Include="Data\CombHelper.cs" />
@@ -82,14 +84,22 @@
     <Compile Include="Data\SingletonList.cs" />
     <Compile Include="Data\SortCondition.cs" />
     <Compile Include="Dependency\IDependency.cs" />
+    <Compile Include="Dependency\IIocBuilder.cs" />
+    <Compile Include="Dependency\IIocResolver.cs" />
     <Compile Include="Dependency\IScopeDependency.cs" />
+    <Compile Include="Dependency\IServiceCollection.cs" />
+    <Compile Include="Dependency\ISingletonDependency.cs" />
+    <Compile Include="Dependency\LifetimeStyle.cs" />
+    <Compile Include="Dependency\ServiceDescriptor.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="ExpirableBase.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\BooleanExtensions.cs" />
+    <Compile Include="Extensions\ClaimsIdentityExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.Part.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\EntityInterfaceExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
@@ -98,6 +108,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ParamterCheckExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
+    <Compile Include="Extensions\ServiceCollectionExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ThreadExtensions.cs" />
@@ -120,6 +131,9 @@
     <Compile Include="Infrastructure\IRecyclable.cs" />
     <Compile Include="Infrastructure\ITimestamp.cs" />
     <Compile Include="Infrastructure\IUpdateAutited.cs" />
+    <Compile Include="Initialize\IDatabaseInitializer.cs" />
+    <Compile Include="Initialize\IDataHandlerInitializer.cs" />
+    <Compile Include="Initialize\IFrameworkInitializer.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,7 +142,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reflection\DirectoryAssemblyFinder.cs" />
+    <Compile Include="Reflection\IAllAssemblyFinder.cs" />
+    <Compile Include="Reflection\IAssemblyFinder.cs" />
+    <Compile Include="Reflection\IFinder.cs" />
+    <Compile Include="Reflection\IMethodInfoFinder.cs" />
+    <Compile Include="Reflection\ITypeFinder.cs" />
     <Compile Include="TransactionalBehavior.cs" />
+    <Compile Include="Utility\Disposable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Configs\ConfigFile\osharp.config" />
@@ -143,6 +164,7 @@
       <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

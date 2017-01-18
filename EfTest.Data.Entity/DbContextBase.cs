@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------
 
 using EfTest.Core;
-using OSharp.Core.Configs;
+using EfTest.Core.Configs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -106,7 +106,8 @@ namespace EfTest.Data.Entity
             string name = contextConfig.ConnectionStringName;
             if (ConfigurationManager.ConnectionStrings[name] == null)
             {
-                throw new InvalidOperationException(Resources.DbContextBase_ConnectionStringNameNotExist.FormatWith(name));
+                //helang
+                //throw new InvalidOperationException(Resources.DbContextBase_ConnectionStringNameNotExist.FormatWith(name));
             }
             return name;
         }

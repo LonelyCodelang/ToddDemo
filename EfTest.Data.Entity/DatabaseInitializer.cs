@@ -7,15 +7,14 @@
 //  <last-date>2015-09-23 10:01</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core.Configs;
+using EfTest.Core.Initialize;
+using EfTest.Data.Entity;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 
-using OSharp.Core.Configs;
-using OSharp.Data.Entity.Logging;
-using OSharp.Data.Entity.Properties;
-using OSharp.Core.Initialize;
-using OSharp.Utility.Extensions;
 
 
 namespace EfTest.Data.Entity
@@ -23,7 +22,7 @@ namespace EfTest.Data.Entity
     /// <summary>
     /// 数据库初始化器，从程序集中反射实体映射类并加载到相应上下文类中，进行上下文类型的初始化
     /// </summary>
-    public class DatabaseInitializer : IDatabaseInitializer
+    public class DatabaseInitializer :IDatabaseInitializer
     {
         /// <summary>
         /// 获取或设置 实体映射程序集查找器
@@ -42,12 +41,12 @@ namespace EfTest.Data.Entity
                 DbContextConfig contextConfig = GetDefaultDbContextConfig();
                 config.ContextConfigs.Add(contextConfig);
             }
-            //如果业务上下文存在开启数据日志功能，并且日志上下文没有设置，则添加日志上下文
-            if (config.ContextConfigs.All(m => m.ContextType != typeof(LoggingDbContext)))
-            {
-                DbContextConfig contextConfig = GetLoggingDbContextConfig();
-                config.ContextConfigs.Add(contextConfig);
-            }
+            //如果业务上下文存在开启数据日志功能，并且日志上下文没有设置，则添加日志上下文 //helang
+            //if (config.ContextConfigs.All(m => m.ContextType != typeof(LoggingDbContext)))
+            //{
+            //    DbContextConfig contextConfig = GetLoggingDbContextConfig();
+            //    config.ContextConfigs.Add(contextConfig);
+            //}
             foreach (DbContextConfig contextConfig in config.ContextConfigs)
             {
                 DbContextInit(contextConfig);
@@ -72,23 +71,6 @@ namespace EfTest.Data.Entity
             };
         }
 
-        /// <summary>
-        /// 获取默认日志上下文配置信息
-        /// </summary>
-        /// <returns></returns>
-        protected virtual DbContextConfig GetLoggingDbContextConfig()
-        {
-            return new DbContextConfig()
-            {
-                ConnectionStringName = "default",
-                ContextType = typeof(LoggingDbContext),
-                InitializerConfig = new DbContextInitializerConfig()
-                {
-                    InitializerType = typeof(LoggingDbContextInitializer),
-                    EntityMapperAssemblies = { typeof(LoggingDbContext).Assembly }
-                }
-            };
-        }
 
         /// <summary>
         /// 初始化数据上下文
@@ -110,7 +92,8 @@ namespace EfTest.Data.Entity
             DbContextInitializerBase initializer = Activator.CreateInstance(initializerType) as DbContextInitializerBase;
             if (initializer == null)
             {
-                throw new InvalidOperationException(Resources.DatabaseInitializer_TypeNotDatabaseInitializer.FormatWith(initializerType));
+                //helang
+               // throw new InvalidOperationException(Resources.DatabaseInitializer_TypeNotDatabaseInitializer.FormatWith(initializerType));
             }
             foreach (Assembly mapperAssembly in config.EntityMapperAssemblies)
             {

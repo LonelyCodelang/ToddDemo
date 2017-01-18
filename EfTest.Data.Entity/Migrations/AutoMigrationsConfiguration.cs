@@ -1,7 +1,8 @@
-﻿using System.Data.Entity;
+﻿using EfTest.Core;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 
-using OSharp.Core.Data;
+
 
 
 namespace EfTest.Data.Entity

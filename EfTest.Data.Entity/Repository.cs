@@ -14,16 +14,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
+using EfTest.Core.Extensions;
+using EfTest.Core;
+using EfTest.Core.Data;
 using EntityFramework.Extensions;
-
-using OSharp.Core.Data;
-using OSharp.Core.Data.Extensions;
-using OSharp.Data.Entity.Properties;
-using OSharp.Core.Mapping;
-using OSharp.Utility;
-using OSharp.Utility.Data;
-using OSharp.Utility.Extensions;
-
 
 namespace EfTest.Data.Entity
 {
@@ -95,56 +89,6 @@ namespace EfTest.Data.Entity
             }
             _dbSet.AddRange(entities);
             return UnitOfWork.SaveChanges();
-        }
-
-        /// <summary>
-        /// 以DTO为载体批量插入实体
-        /// </summary>
-        /// <typeparam name="TInputDto">添加DTO类型</typeparam>
-        /// <param name="dtos">添加DTO信息集合</param>
-        /// <param name="checkAction">添加信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        public OperationResult Insert<TInputDto>(ICollection<TInputDto> dtos,
-            Action<TInputDto> checkAction = null,
-            Func<TInputDto, TEntity, TEntity> updateFunc = null)
-            where TInputDto : IInputDto<TKey>
-        {
-            dtos.CheckNotNull("dtos");
-            List<string> names = new List<string>();
-            foreach (TInputDto dto in dtos)
-            {
-                try
-                {
-                    if (checkAction != null)
-                    {
-                        checkAction(dto);
-                    }
-                    TEntity entity = dto.MapTo<TEntity>();
-                    if (updateFunc != null)
-                    {
-                        entity = updateFunc(dto, entity);
-                    }
-                    entity.CheckICreatedAudited<TEntity, TKey>().CheckICreatedTime<TEntity, TKey>();
-                    _dbSet.Add(entity);
-                }
-                catch (Exception e)
-                {
-                    return new OperationResult(OperationResultType.Error, e.Message);
-                }
-                string name = GetNameValue(dto);
-                if (name != null)
-                {
-                    names.Add(name);
-                }
-            }
-            int count = UnitOfWork.SaveChanges();
-            return count > 0
-                ? new OperationResult(OperationResultType.Success,
-                    names.Count > 0
-                        ? "信息“{0}”添加成功".FormatWith(names.ExpandAndToString())
-                        : "{0}个信息添加成功".FormatWith(dtos.Count))
-                : new OperationResult(OperationResultType.NoChanged);
         }
 
         /// <summary>
@@ -385,60 +329,6 @@ namespace EfTest.Data.Entity
         }
 
         /// <summary>
-        /// 以DTO为载体批量更新实体
-        /// </summary>
-        /// <typeparam name="TEditDto">更新DTO类型</typeparam>
-        /// <param name="dtos">更新DTO信息集合</param>
-        /// <param name="checkAction">更新信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        public OperationResult Update<TEditDto>(ICollection<TEditDto> dtos,
-            Action<TEditDto, TEntity> checkAction = null,
-            Func<TEditDto, TEntity, TEntity> updateFunc = null)
-            where TEditDto : IInputDto<TKey>
-        {
-            dtos.CheckNotNull("dtos");
-            List<string> names = new List<string>();
-            foreach (TEditDto dto in dtos)
-            {
-                try
-                {
-                    TEntity entity = _dbSet.Find(dto.Id);
-                    if (entity == null)
-                    {
-                        return new OperationResult(OperationResultType.QueryNull);
-                    }
-                    if (checkAction != null)
-                    {
-                        checkAction(dto, entity);
-                    }
-                    entity = dto.MapTo(entity);
-                    if (updateFunc != null)
-                    {
-                        entity = updateFunc(dto, entity);
-                    }
-                    ((DbContext)UnitOfWork).Update<TEntity, TKey>(entity);
-                }
-                catch (Exception e)
-                {
-                    return new OperationResult(OperationResultType.Error, e.Message);
-                }
-                string name = GetNameValue(dto);
-                if (name != null)
-                {
-                    names.Add(name);
-                }
-            }
-            int count = UnitOfWork.SaveChanges();
-            return count > 0
-                ? new OperationResult(OperationResultType.Success,
-                    names.Count > 0
-                        ? "信息“{0}”更新成功".FormatWith(names.ExpandAndToString())
-                        : "{0}个信息更新成功".FormatWith(dtos.Count))
-                : new OperationResult(OperationResultType.NoChanged);
-        }
-
-        /// <summary>
         /// 直接更新指定编号的数据
         /// </summary>
         /// <param name="key">实体编号</param>
@@ -574,56 +464,6 @@ namespace EfTest.Data.Entity
             }
             _dbSet.AddRange(entities);
             return await UnitOfWork.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// 异步以DTO为载体批量插入实体
-        /// </summary>
-        /// <typeparam name="TInputDto">添加DTO类型</typeparam>
-        /// <param name="dtos">添加DTO信息集合</param>
-        /// <param name="checkAction">添加信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        public async Task<OperationResult> InsertAsync<TInputDto>(ICollection<TInputDto> dtos,
-            Func<TInputDto, Task> checkAction = null,
-            Func<TInputDto, TEntity, Task<TEntity>> updateFunc = null)
-            where TInputDto : IInputDto<TKey>
-        {
-            dtos.CheckNotNull("dtos");
-            List<string> names = new List<string>();
-            foreach (TInputDto dto in dtos)
-            {
-                try
-                {
-                    if (checkAction != null)
-                    {
-                        await checkAction(dto);
-                    }
-                    TEntity entity = dto.MapTo<TEntity>();
-                    if (updateFunc != null)
-                    {
-                        entity = await updateFunc(dto, entity);
-                    }
-                    entity.CheckICreatedAudited<TEntity, TKey>().CheckICreatedTime<TEntity, TKey>();
-                    _dbSet.Add(entity);
-                }
-                catch (Exception e)
-                {
-                    return new OperationResult(OperationResultType.Error, e.Message);
-                }
-                string name = GetNameValue(dto);
-                if (name != null)
-                {
-                    names.Add(name);
-                }
-            }
-            int count = await UnitOfWork.SaveChangesAsync();
-            return count > 0
-                ? new OperationResult(OperationResultType.Success,
-                    names.Count > 0
-                        ? "信息“{0}”添加成功".FormatWith(names.ExpandAndToString())
-                        : "{0}个信息添加成功".FormatWith(dtos.Count))
-                : OperationResult.NoChanged;
         }
 
         /// <summary>
@@ -866,60 +706,6 @@ namespace EfTest.Data.Entity
         }
 
         /// <summary>
-        /// 异步以DTO为载体批量更新实体
-        /// </summary>
-        /// <typeparam name="TEditDto">更新DTO类型</typeparam>
-        /// <param name="dtos">更新DTO信息集合</param>
-        /// <param name="checkAction">更新信息合法性检查委托</param>
-        /// <param name="updateFunc">由DTO到实体的转换委托</param>
-        /// <returns>业务操作结果</returns>
-        public async Task<OperationResult> UpdateAsync<TEditDto>(ICollection<TEditDto> dtos,
-            Func<TEditDto, TEntity, Task> checkAction = null,
-            Func<TEditDto, TEntity, Task<TEntity>> updateFunc = null)
-            where TEditDto : IInputDto<TKey>
-        {
-            dtos.CheckNotNull("dtos");
-            List<string> names = new List<string>();
-            foreach (TEditDto dto in dtos)
-            {
-                try
-                {
-                    TEntity entity = await _dbSet.FindAsync(dto.Id);
-                    if (entity == null)
-                    {
-                        return new OperationResult(OperationResultType.QueryNull);
-                    }
-                    if (checkAction != null)
-                    {
-                        await checkAction(dto, entity);
-                    }
-                    entity = dto.MapTo(entity);
-                    if (updateFunc != null)
-                    {
-                        entity = await updateFunc(dto, entity);
-                    }
-                    ((DbContext)UnitOfWork).Update<TEntity, TKey>(entity);
-                }
-                catch (Exception e)
-                {
-                    return new OperationResult(OperationResultType.Error, e.Message);
-                }
-                string name = GetNameValue(dto);
-                if (name != null)
-                {
-                    names.Add(name);
-                }
-            }
-            int count = await UnitOfWork.SaveChangesAsync();
-            return count > 0
-                ? new OperationResult(OperationResultType.Success,
-                    names.Count > 0
-                        ? "信息“{0}”更新成功".FormatWith(names.ExpandAndToString())
-                        : "{0}个信息更新成功".FormatWith(dtos.Count))
-                : new OperationResult(OperationResultType.NoChanged);
-        }
-
-        /// <summary>
         /// 直接更新指定编号的数据
         /// </summary>
         /// <param name="key">实体编号</param>
@@ -1019,6 +805,7 @@ namespace EfTest.Data.Entity
                 return null;
             }
         }
+
 
         #endregion
     }

@@ -7,11 +7,9 @@
 //  <last-date>2015-08-02 15:52</last-date>
 // -----------------------------------------------------------------------
 
+using EfTest.Core;
+using EfTest.Core.Dependency;
 using System;
-
-using OSharp.Core.Data;
-using OSharp.Core.Dependency;
-
 
 namespace EfTest.Data.Entity
 {

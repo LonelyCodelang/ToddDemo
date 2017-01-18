@@ -14,7 +14,7 @@ using EfTest.Core;
 
 
 
-namespace OSharp.Core.Configs
+namespace EfTest.Core.Configs
 {
     /// <summary>
     /// OSharp数据上下文配置

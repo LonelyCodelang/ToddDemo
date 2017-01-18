@@ -7,7 +7,7 @@
 //  <last-date>2015-09-26 0:58</last-date>
 // -----------------------------------------------------------------------
 
-namespace OSharp.Core.Configs
+namespace EfTest.Core.Configs
 {
     /// <summary>
     /// OSharp数据配置信息重置类
