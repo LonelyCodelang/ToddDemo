@@ -31,10 +31,10 @@ namespace EfTest.Data.Entity.samples
 
 
 
-            IServicesBuilder builder = new ServicesBuilder(new ServiceBuildOptions());
-            IServiceCollection services = builder.Build();
-            // services.AddLog4NetServices();
-            services.AddDataServices();
+            //IServicesBuilder builder = new ServicesBuilder(new ServiceBuildOptions());
+            //IServiceCollection services = builder.Build();
+            //// services.AddLog4NetServices();
+            //services.AddDataServices();
 
             //数据库初始化
             IDatabaseInitializer databaseInitializer = new DatabaseInitializer();

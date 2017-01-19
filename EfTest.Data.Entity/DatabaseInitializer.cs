@@ -9,6 +9,7 @@
 
 using EfTest.Core.Configs;
 using EfTest.Core.Initialize;
+using EfTest.Core.Reflection;
 using EfTest.Data.Entity;
 using System;
 using System.Data.Entity;
@@ -24,6 +25,14 @@ namespace EfTest.Data.Entity
     /// </summary>
     public class DatabaseInitializer : IDatabaseInitializer
     {
+        public DatabaseInitializer()
+        {
+            MapperAssemblyFinder = new EntityMapperAssemblyFinder()
+            {
+                AllAssemblyFinder = new DirectoryAssemblyFinder()
+            };
+        }
+
         /// <summary>
         /// 获取或设置 实体映射程序集查找器
         /// </summary>
@@ -39,7 +48,16 @@ namespace EfTest.Data.Entity
             if (config == null || !config.ContextConfigs.Any())
             {
                 DbContextConfig contextConfig = GetDefaultDbContextConfig();
-                config.ContextConfigs.Add(contextConfig);
+                if (config == null)
+                {
+                    config = new DataConfig();
+                    config.ContextConfigs.Add(contextConfig);
+                }
+                else
+                {
+                    config.ContextConfigs.Add(contextConfig);
+                }
+            
             }
             //如果业务上下文存在开启数据日志功能，并且日志上下文没有设置，则添加日志上下文 //helang
             //if (config.ContextConfigs.All(m => m.ContextType != typeof(LoggingDbContext)))
