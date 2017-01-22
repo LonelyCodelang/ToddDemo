@@ -5,3 +5,12 @@ http://www.cnblogs.com/liqingwen/p/5902587.html
 
 C#异步的世界【上】
 http://www.cnblogs.com/zhaopei/p/async_one.html
+
+.NET 通用高扩展性的细粒度权限管理架构(webApi/Mvc)
+http://www.cnblogs.com/jonneydong/p/6336889.html
+
+开源第三方登录组件OAuthLogin2.0 支持QQ,阿里巴巴,淘宝,京东,蘑菇街,有赞等平台
+http://www.cnblogs.com/dazhuangtage/p/6306133.html
+
+做个简单的Redis监控(源码分享)
+http://www.cnblogs.com/qtqq/p/6280183.html
