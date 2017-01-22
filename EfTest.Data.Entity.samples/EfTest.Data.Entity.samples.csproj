@@ -51,7 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModelConfigurations\DepartmentConfiguration.cs" />
+    <Compile Include="ModelConfigurations\RoleConfiguration.cs" />
     <Compile Include="ModelConfigurations\UserInfoConfiguration.cs" />
+    <Compile Include="Model\Department.cs" />
+    <Compile Include="Model\Role.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

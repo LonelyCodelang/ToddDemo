@@ -43,6 +43,7 @@ namespace EfTest.Data.Entity.samples
                 databaseInitializer.Initialize(null);
               
             }
+            Console.WriteLine("初始化完成");
         }
     }
 }

@@ -9,31 +9,35 @@ using System.Threading.Tasks;
 namespace EfTest.Data.Entity.samples.Model
 {
     /// <summary>
-    /// 用户信息
+    /// 部门信息
     /// </summary>
-    public class UserInfo : EntityBase<long>
+    public class Department : EntityBase<long>
     {
         /// <summary>
-        /// 用户名
+        /// 部门名
         /// </summary>
         [StringLength(100)]
-        public string UserName { get; set; }
+        public string DepartName { get; set; }
 
         /// <summary>
-        /// 用户邮箱
+        /// 部门说明
         /// </summary>
         [StringLength(100)]
-        public string Email { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
-        /// 用户密码
+        /// 创建时间
         /// </summary>
-        [StringLength(100)]
-        public string PassWord { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
-        /// 用户部门信息
+        /// 修改时间
         /// </summary>
-        public virtual Department Department { get; set; }
+        public DateTime? UpdateTime { get; set; }
+
+        /// <summary>
+        /// 是否可用
+        /// </summary>
+        public bool IsEnable { get; set; }
     }
 }

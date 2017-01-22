@@ -14,7 +14,7 @@ namespace EfTest.Data.Entity.samples.ModelConfigurations
         /// </summary>
         public UserInfoConfiguration()
         {
-            //UserConfigurationAppend();
+            HasOptional(m => m.Department).WithMany();
         }
     }
 }
