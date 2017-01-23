@@ -11,7 +11,7 @@ namespace EfTest.Data.Entity.samples.ModelConfigurations
     {
         public DepartmentConfiguration()
         {
-
+            this.HasOptional(x => x.Parent).WithMany(x => x.Children).HasForeignKey(x => x.ParentId);
         }
     }
 }

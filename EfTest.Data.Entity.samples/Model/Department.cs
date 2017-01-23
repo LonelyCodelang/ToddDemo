@@ -39,5 +39,20 @@ namespace EfTest.Data.Entity.samples.Model
         /// 是否可用
         /// </summary>
         public bool IsEnable { get; set; }
+
+        /// <summary>
+        /// 父级部门id
+        /// </summary>
+        public long? ParentId { get; set; }
+
+        /// <summary>
+        /// 父级部门
+        /// </summary>
+        public Department Parent { get; set; }
+
+        /// <summary>
+        /// 子部门 
+        /// </summary>
+        public virtual ICollection<Department> Children { get; set; }
     }
 }

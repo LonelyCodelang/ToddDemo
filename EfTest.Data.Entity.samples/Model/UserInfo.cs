@@ -35,5 +35,10 @@ namespace EfTest.Data.Entity.samples.Model
         /// 用户部门信息
         /// </summary>
         public virtual Department Department { get; set; }
+
+        /// <summary>
+        /// 角色
+        /// </summary>
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

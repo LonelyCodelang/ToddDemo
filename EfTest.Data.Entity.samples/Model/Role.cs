@@ -39,5 +39,10 @@ namespace EfTest.Data.Entity.samples.Model
         /// 是否可用
         /// </summary>
         public bool IsEnable { get; set; }
+
+        /// <summary>
+        /// 角色
+        /// </summary>
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

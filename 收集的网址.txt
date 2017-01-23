@@ -5,3 +5,6 @@ http://www.cnblogs.com/liqingwen/p/5902587.html
 
 C#异步的世界【上】
 http://www.cnblogs.com/zhaopei/p/async_one.html
+
+.NET 通用高扩展性的细粒度权限管理架构(webApi/Mvc)
+http://www.cnblogs.com/jonneydong/p/6336889.html
