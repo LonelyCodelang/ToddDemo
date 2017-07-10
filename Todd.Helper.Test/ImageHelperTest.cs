@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ImageProcessor;
+using ImageProcessor.Imaging.Filters.Photo;
+using ImageProcessor.Imaging.Formats;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -86,6 +89,41 @@ namespace Todd.Helper.Test
 
         }
 
+        //图片黑白
+        [Fact]
+        public void GrayImagetest1()
+        {
+            string imagePath = @"D:\test\img\123.jpg";
+
+            string saveImagePath = @"D:\test\img\123N222.jpg";
+
+            // ImageHelper.GrayImage(new Bitmap(imagePath), 1).Save(saveImagePath,ImageFormat.Jpeg);
+
+            ImageHelper.GrayScale(imagePath, saveImagePath);
+
+        }
+
+        [Fact]
+        public void GrayImagetest2()
+        {
+            string imagePath = @"D:\test\img\123.jpg";
+            string saveImagePath = @"D:\test\img\123N555.jpg";
+
+
+            //string imagePath = @"D:\test\123\aaa111111.jpg";
+            //string saveImagePath = @"D:\test\img\123N555.jpg";
+
+
+            //string imagePath = @"D:\test\1\xx.png";
+
+            //string saveImagePath = @"D:\test\1\2-4.png";
+
+            // ImageHelper.GrayImage(new Bitmap(imagePath), 1).Save(saveImagePath,ImageFormat.Jpeg);
+            // ImageHelper.GrayScale(imagePath, saveImagePath);
+            ImageHelper.GraySelva(imagePath, saveImagePath);
+
+        }
+
         public Bitmap MakeGrayscale3(Bitmap original)
         {
             //create a blank bitmap the same size as original
@@ -119,6 +157,39 @@ namespace Todd.Helper.Test
             //dispose the Graphics object
             g.Dispose();
             return newBitmap;
+        }
+
+
+        [Fact]
+        public void ImageProcessorTest1()
+        {
+            string imagePath = @"D:\test\img\123.jpg";
+            //string saveImagePath = @"D:\test\img\123N555.jpg";
+
+            //string imagePath = @"D:\test\1\xx.png";
+            string saveImagePath = @"D:\test\1\xx_new3.png";
+
+            byte[] photoBytes = File.ReadAllBytes(imagePath);
+            // Format is automatically detected though can be changed.
+            ISupportedImageFormat format = new JpegFormat { };
+            //Size size = new Size(150, 0);
+            using (MemoryStream inStream = new MemoryStream(photoBytes))
+            {
+                using (MemoryStream outStream = new MemoryStream())
+                {
+                    // Initialize the ImageFactory using the overload to preserve EXIF metadata.
+                    using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
+                    {
+                        // Load, resize, set the format and quality and save an image.
+                        imageFactory.Load(inStream)
+                                    .Filter(MatrixFilters.GreyScale)
+                                    .Format(format)
+                                    .Save(saveImagePath);
+                    }
+                    // Do something with the stream.
+                }
+            }
+
         }
 
     }

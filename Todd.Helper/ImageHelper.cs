@@ -392,8 +392,104 @@ namespace Todd.Helper
             return newbmp;
         }
 
+        /// <summary>
+        /// 图片黑白处理（打印出来会有绿色）
+        /// </summary>
+        /// <param name="imgPath">要处理的图片路径</param>
+        /// <param name="newImgPath">处理后的图片存储路径</param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static void GrayImage(string imgPath, string newImgPath)
+        {
+            try
+            {
+                Bitmap original = new Bitmap(imgPath);
+                Bitmap newBitmap = new Bitmap(original.Width, original.Height);
 
+                //get a graphics object from the new image
+                Graphics g = Graphics.FromImage(newBitmap);
 
+                //create the grayscale ColorMatrix
+                ColorMatrix colorMatrix = new ColorMatrix(
+                   new float[][]
+                   {
+                     new float[] {.3f, .3f, .3f, 0, 0},
+                     new float[] {.59f, .59f, .59f, 0, 0},
+                     new float[] {.11f, .11f, .11f, 0, 0},
+                     new float[] {0, 0, 0, 1, 0},
+                     new float[] {0, 0, 0, 0, 1}
+                   });
 
+                //create some image attributes
+                ImageAttributes attributes = new ImageAttributes();
+
+                //set the color matrix attribute
+                attributes.SetColorMatrix(colorMatrix);
+
+                //draw the original image on the new image
+                //using the grayscale color matrix
+                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
+                   0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
+
+                //dispose the Graphics object
+                g.Dispose();
+                newBitmap.Save(newImgPath);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 图片黑白处理
+        /// </summary>
+        /// <param name="imgPath"></param>
+        /// <param name="NewImgPath"></param>
+        public static void GrayScale(string imgPath, string NewImgPath)
+        {
+            try
+            {
+                Bitmap Bmp = new Bitmap(imgPath);
+                int rgb;
+                Color c;
+
+                for (int y = 0; y < Bmp.Height; y++)
+                    for (int x = 0; x < Bmp.Width; x++)
+                    {
+                        c = Bmp.GetPixel(x, y);
+                        rgb = (int)((c.R + c.G + c.B) / 3);
+                        Bmp.SetPixel(x, y, Color.FromArgb(rgb, rgb, rgb));
+                    }
+                Bmp.Save(NewImgPath);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 图片黑白处理
+        /// </summary>
+        /// <param name="imgPath"></param>
+        /// <param name="NewImgPath"></param>
+        public static void GraySelva(string imgPath, string NewImgPath)
+        {
+            var originalbmp = new Bitmap(imgPath); // Load the  image
+            var newbmp = new Bitmap(imgPath); // New image
+            for (int row = 0; row < originalbmp.Width; row++) // Indicates row number
+            {
+                for (int column = 0; column < originalbmp.Height; column++) // Indicate column number
+                {
+                    var colorValue = originalbmp.GetPixel(row, column); // Get the color pixel
+                    var averageValue = ((int)colorValue.R + (int)colorValue.B + (int)colorValue.G) / 3; // get the average for black and white
+                    newbmp.SetPixel(row, column, Color.FromArgb(averageValue, averageValue, averageValue)); // Set the value to new pixel
+                }
+            }
+            newbmp.Save(NewImgPath);
+        }
+
+       
     }
 }
