@@ -9,6 +9,7 @@
 
 using EfTest.Core.Configs;
 using EfTest.Core.Initialize;
+using EfTest.Core.Reflection;
 using EfTest.Data.Entity;
 using System;
 using System.Data.Entity;
@@ -22,8 +23,16 @@ namespace EfTest.Data.Entity
     /// <summary>
     /// 数据库初始化器，从程序集中反射实体映射类并加载到相应上下文类中，进行上下文类型的初始化
     /// </summary>
-    public class DatabaseInitializer :IDatabaseInitializer
+    public class DatabaseInitializer : IDatabaseInitializer
     {
+        public DatabaseInitializer()
+        {
+            MapperAssemblyFinder = new EntityMapperAssemblyFinder()
+            {
+                AllAssemblyFinder = new DirectoryAssemblyFinder()
+            };
+        }
+
         /// <summary>
         /// 获取或设置 实体映射程序集查找器
         /// </summary>
@@ -36,10 +45,19 @@ namespace EfTest.Data.Entity
         public virtual void Initialize(DataConfig config)
         {
             //没有上下文，添加默认上下文
-            if (!config.ContextConfigs.Any())
+            if (config == null || !config.ContextConfigs.Any())
             {
                 DbContextConfig contextConfig = GetDefaultDbContextConfig();
-                config.ContextConfigs.Add(contextConfig);
+                if (config == null)
+                {
+                    config = new DataConfig();
+                    config.ContextConfigs.Add(contextConfig);
+                }
+                else
+                {
+                    config.ContextConfigs.Add(contextConfig);
+                }
+            
             }
             //如果业务上下文存在开启数据日志功能，并且日志上下文没有设置，则添加日志上下文 //helang
             //if (config.ContextConfigs.All(m => m.ContextType != typeof(LoggingDbContext)))
@@ -93,7 +111,7 @@ namespace EfTest.Data.Entity
             if (initializer == null)
             {
                 //helang
-               // throw new InvalidOperationException(Resources.DatabaseInitializer_TypeNotDatabaseInitializer.FormatWith(initializerType));
+                // throw new InvalidOperationException(Resources.DatabaseInitializer_TypeNotDatabaseInitializer.FormatWith(initializerType));
             }
             foreach (Assembly mapperAssembly in config.EntityMapperAssemblies)
             {

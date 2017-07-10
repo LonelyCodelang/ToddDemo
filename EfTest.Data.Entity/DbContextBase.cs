@@ -36,7 +36,7 @@ namespace EfTest.Data.Entity
     public abstract class DbContextBase<TDbContext> : DbContext, IUnitOfWork
         where TDbContext : DbContext, IUnitOfWork, new()
     {
-      //  protected readonly ILogger Logger = LogManager.GetLogger(typeof(TDbContext));
+        //  protected readonly ILogger Logger = LogManager.GetLogger(typeof(TDbContext));
         private static DbContextConfig _contextConfig;
 
         #region 构造函数
@@ -101,11 +101,12 @@ namespace EfTest.Data.Entity
             DbContextConfig contextConfig = GetDbContextConfig();
             if (contextConfig == null || !contextConfig.Enabled)
             {
-                return typeof(TDbContext).ToString();
+                return "default"; //typeof(TDbContext).ToString();
             }
             string name = contextConfig.ConnectionStringName;
             if (ConfigurationManager.ConnectionStrings[name] == null)
             {
+                name = "default";
                 //helang
                 //throw new InvalidOperationException(Resources.DbContextBase_ConnectionStringNameNotExist.FormatWith(name));
             }
@@ -287,7 +288,7 @@ namespace EfTest.Data.Entity
             {
                 Configuration.ValidateOnSaveEnabled = validateOnSaveEnabled;
                 //记录实体操作日志  helang
-               // List<DataLog> logs = new List<DataLog>();
+                // List<DataLog> logs = new List<DataLog>();
                 //if (DataLoggingEnabled)
                 //{
                 //    logs = this.GetEntityDataLogs(ServiceProvider).ToList();
@@ -312,9 +313,9 @@ namespace EfTest.Data.Entity
                 //    {
                 //        DataLogCache.AddDataLog(log);
                 //    }
-                  
+
                 //}
-             
+
                 return count;
             }
             catch (DbUpdateException e)
@@ -323,7 +324,7 @@ namespace EfTest.Data.Entity
                 {
                     SqlException sqlEx = e.InnerException.InnerException as SqlException;
                     string msg = DataHelper.GetSqlExceptionMessage(sqlEx.Number);
-                  //  throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);  // helang
+                    //  throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx);  // helang
                 }
                 throw;
             }
@@ -400,9 +401,9 @@ namespace EfTest.Data.Entity
                 //    {
                 //        DataLogCache.AddDataLog(log);
                 //    }
-                  
+
                 //}
-                
+
                 return count;
             }
             catch (DbUpdateException e)
@@ -411,7 +412,7 @@ namespace EfTest.Data.Entity
                 {
                     SqlException sqlEx = e.InnerException.InnerException as SqlException;
                     string msg = DataHelper.GetSqlExceptionMessage(sqlEx.Number);
-                   // throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx); // helang
+                    // throw new OSharpException("提交数据更新时发生异常：" + msg, sqlEx); // helang
                 }
                 throw;
             }
