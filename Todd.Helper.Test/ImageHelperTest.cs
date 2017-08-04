@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -190,6 +191,92 @@ namespace Todd.Helper.Test
                 }
             }
 
+        }
+
+
+        [Fact]
+        public void isBlackWhiteTest1()
+        {
+            string filePath = @"D:\test\1\1.png";
+            string filePath1 = @"D:\test\1\ttt\2.png";
+            string filePath2 = @"D:\test\1\ttt\3.png";
+            //ImageHelper.GrayImage1(filePath, filePath1);
+            //int i = 0;
+            //Byte[,] xx= ImageHelper.ToBinaryArray(new Bitmap(filePath), BinarizationMethods.Otsu, out i);
+            //BinaryArrayToBinaryBitmap(xx).Save(filePath2);
+
+
+            ChangeGray(new Bitmap(filePath)).Save(filePath2);
+        }
+
+        /// <summary>
+        /// 将二值化数组转换为二值化图像
+        /// </summary>
+        /// <param name="binaryArray">二值化数组</param>
+        /// <returns>二值化图像</returns>
+        public static Bitmap BinaryArrayToBinaryBitmap(Byte[,] binaryArray)
+        {   // 将二值化数组转换为二值化数据
+            Int32 PixelHeight = binaryArray.GetLength(0);
+            Int32 PixelWidth = binaryArray.GetLength(1);
+            Int32 Stride = ((PixelWidth + 31) >> 5) << 2;
+            Byte[] Pixels = new Byte[PixelHeight * Stride];
+            for (Int32 i = 0; i < PixelHeight; i++)
+            {
+                Int32 Base = i * Stride;
+                for (Int32 j = 0; j < PixelWidth; j++)
+                {
+                    if (binaryArray[i, j] != 0)
+                    {
+                        Pixels[Base + (j >> 3)] |= Convert.ToByte(0x80 >> (j & 0x7));
+                    }
+                }
+            }
+
+            // 创建黑白图像
+            Bitmap BinaryBmp = new Bitmap(PixelWidth, PixelHeight, PixelFormat.Format1bppIndexed);
+
+            // 设置调色表
+            ColorPalette cp = BinaryBmp.Palette;
+            cp.Entries[0] = Color.Black;    // 黑色
+            cp.Entries[1] = Color.White;    // 白色
+            BinaryBmp.Palette = cp;
+
+            // 设置位图图像特性
+            BitmapData BinaryBmpData = BinaryBmp.LockBits(new Rectangle(0, 0, PixelWidth, PixelHeight), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed);
+            Marshal.Copy(Pixels, 0, BinaryBmpData.Scan0, Pixels.Length);
+            BinaryBmp.UnlockBits(BinaryBmpData);
+
+            return BinaryBmp;
+        }
+
+
+        public static Bitmap ChangeGray(Bitmap b)
+        {
+            BitmapData bmData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite,
+             PixelFormat.Format24bppRgb);
+            int stride = bmData.Stride;   // 扫描的宽度 
+
+            unsafe
+            {
+                byte* p = (byte*)bmData.Scan0.ToPointer(); // 获取图像首地址
+                int nOffset = stride - b.Width * 3;  // 实际宽度与系统宽度的距离
+                byte red, green, blue;
+                for (int y = 0; y < b.Height; ++y)
+                {
+                    for (int x = 0; x < b.Width; ++x)
+                    {
+                        blue = p[0];
+                        green = p[1];
+                        red = p[2];
+
+                        p[0] = p[1] = p[2] = (byte)(.299 * red + .587 * green + .114 * blue); // 转换公式
+                        p += 3;  // 跳过3个字节处理下个像素点
+                    }
+                    p += nOffset; // 加上间隔
+                }
+            }
+            b.UnlockBits(bmData); // 解锁
+            return b;
         }
 
     }

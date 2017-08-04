@@ -14,3 +14,27 @@ http://www.cnblogs.com/dazhuangtage/p/6306133.html
 
 做个简单的Redis监控(源码分享)
 http://www.cnblogs.com/qtqq/p/6280183.html
+
+
+仓储讨论
+https://stackoverflow.com/questions/14110890/not-using-repository-pattern-use-the-orm-as-is-ef
+https://stackoverflow.com/questions/21349950/entity-framework-6-code-first-is-repository-implementation-a-good-one
+
+存储库模式是否适用于实体框架？
+http://www.thereformedprogrammer.net/is-the-repository-pattern-useful-with-entity-framework/
+http://www.thereformedprogrammer.net/is-the-repository-pattern-useful-with-entity-framework-part-2/
+
+Entity Framework Repository
+https://github.com/danemorgridge/efrepo
+
+
+一个将要开源的项目
+https://github.com/JonPSmith/EfCoreInAction
+
+
+GenericServices帮助使用EF6.x在基于.NET的应用程序中构建服务/应用程序层（重点）
+https://github.com/JonPSmith/GenericServices
+
+
+实体框架图合并扩展方法 （重点）
+https://github.com/refactorthis/GraphDiff
