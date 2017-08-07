@@ -58,9 +58,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSharp.DataTest", "OSharp.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfTest.Data.Entity.samples", "EfTest.Data.Entity.samples\EfTest.Data.Entity.samples.csproj", "{FB79BA78-1F0C-489D-876C-941E3AA67B5A}"
 EndProject
+<<<<<<< HEAD
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth2", "auth2", "{89453321-D17B-452A-9C06-8DB3FA151F85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAuthTest", "WebAuthTest\WebAuthTest.csproj", "{0B0AF97E-778F-4D0E-A5A8-1401C148A095}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTest", "ImageTest\ImageTest.csproj", "{3906A7E7-9051-4709-A8D5-E4DCB9325451}"
+>>>>>>> origin/master
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,10 +144,17 @@ Global
 		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB79BA78-1F0C-489D-876C-941E3AA67B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
+		{0B0AF97E-778F-4D0E-A5A8-1401C148A095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B0AF97E-778F-4D0E-A5A8-1401C148A095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B0AF97E-778F-4D0E-A5A8-1401C148A095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B0AF97E-778F-4D0E-A5A8-1401C148A095}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{3906A7E7-9051-4709-A8D5-E4DCB9325451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3906A7E7-9051-4709-A8D5-E4DCB9325451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3906A7E7-9051-4709-A8D5-E4DCB9325451}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3906A7E7-9051-4709-A8D5-E4DCB9325451}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> origin/master
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -165,6 +176,10 @@ Global
 		{39575B2F-933B-4AAD-9FAC-C2645509C0CF} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
 		{69763DC5-4CDA-46DB-A364-2EC755436D5A} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
 		{FB79BA78-1F0C-489D-876C-941E3AA67B5A} = {F175F2C9-C54F-420E-9F26-7D09E432FF8E}
+<<<<<<< HEAD
+		{0B0AF97E-778F-4D0E-A5A8-1401C148A095} = {89453321-D17B-452A-9C06-8DB3FA151F85}
+=======
 		{3906A7E7-9051-4709-A8D5-E4DCB9325451} = {AF9C3A3D-AF55-468A-AE50-AD650535A5C8}
+>>>>>>> origin/master
 	EndGlobalSection
 EndGlobal
