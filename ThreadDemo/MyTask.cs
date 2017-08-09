@@ -10,7 +10,7 @@ namespace ThreadDemo
     public class MyTask
     {
 
-        public void Run1()
+        public async void Run1()
         {
             Task t1 = Task.Factory.StartNew(delegate { MyMethodA(); });
             Task t2 = Task.Factory.StartNew(delegate { MyMethodB(); });
@@ -26,7 +26,7 @@ namespace ThreadDemo
 
             //Wait:等待方法执行完成才返回
 
-            Wait Task.WaitAll(t1, t2);
+             Task.WaitAll(t1, t2);
         }
 
         public void Run2()

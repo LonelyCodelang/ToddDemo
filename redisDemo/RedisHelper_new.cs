@@ -324,7 +324,7 @@ namespace Peacock.Report.Helper
         /// <param name="e"></param>
         private static void MuxerErrorMessage(object sender, RedisErrorEventArgs e)
         {
-            NLogHelper.WriteError("Redis错误:" + e.Message);
+          //  NLogHelper.WriteError("Redis错误:" + e.Message);
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Peacock.Report.Helper
         /// <param name="e"></param>
         private static void MuxerConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
-            NLogHelper.WriteError("Redis错误重新连接：Endpoint failed: " + e.EndPoint + ", " + e.FailureType + (e.Exception == null ? "" : (", " + e.Exception.Message)));
+           // NLogHelper.WriteError("Redis错误重新连接：Endpoint failed: " + e.EndPoint + ", " + e.FailureType + (e.Exception == null ? "" : (", " + e.Exception.Message)));
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace Peacock.Report.Helper
         /// <param name="e"></param>
         private static void MuxerInternalError(object sender, InternalErrorEventArgs e)
         {
-            NLogHelper.WriteError("redis类库错误:Message" + e.Exception.Message);
+          //  NLogHelper.WriteError("redis类库错误:Message" + e.Exception.Message);
         }
         #endregion
     }
