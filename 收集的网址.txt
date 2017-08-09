@@ -38,3 +38,14 @@ https://github.com/JonPSmith/GenericServices
 
 实体框架图合并扩展方法 （重点）
 https://github.com/refactorthis/GraphDiff
+
+
+efresp
+https://github.com/danemorgridge/efrepo
+https://github.com/kirkchen/EFRepository
+
+
+之前公司项目参考 NopCommerce 开发了一套系统，但是不支持 UnitOfWork，最近想开发新的项目，所以就基于原有的基础上又添加 UnitOfWork 支持，由于目前正在逐步完善中，所以可能存在各种问题，这里发出来仅供大家参考。
+https://github.com/weisenzcharles/Uow-Framework/tree/master/Uow.Core
+
+https://github.com/weisenzcharles/Uow-Framework
