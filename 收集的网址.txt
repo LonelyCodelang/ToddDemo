@@ -49,3 +49,18 @@ https://github.com/kirkchen/EFRepository
 https://github.com/weisenzcharles/Uow-Framework/tree/master/Uow.Core
 
 https://github.com/weisenzcharles/Uow-Framework
+
+
+
+AutoMapper6扩展 
+http://www.cnblogs.com/jianxuanbing/p/7122877.html
+
+
+An MVC 5 and Web API 2 application with Automapper, EF 6, repository pattern, dependency injection and IOC using Autofac which uses one unit of work to deal with multiple dbcontexts with Async functions
+https://github.com/raghav-rosberg/UnitOfWorkWithMultipleDBContext
+
+
+
+C# ProtoBuf 入门
+ 另外我们这边用protobuf序列化后放到redis，比json缩小50%，序列化性能是json的两三倍
+http://www.cnblogs.com/tom6886/p/6722269.html
