@@ -13,8 +13,8 @@ namespace ThreadDemo
         static void Main(string[] args)
         {
             //new MyTask().Run1();
-            new MyTask().Run2();
-            Console.WriteLine("完成");
+            //new MyTask().Run2();
+            //Console.WriteLine("完成");
 
             List<int> source = new List<int>();
             for (int i = 0; i < 1000; i++)

@@ -64,3 +64,7 @@ https://github.com/raghav-rosberg/UnitOfWorkWithMultipleDBContext
 C# ProtoBuf 入门
  另外我们这边用protobuf序列化后放到redis，比json缩小50%，序列化性能是json的两三倍
 http://www.cnblogs.com/tom6886/p/6722269.html
+
+MQ文章
+http://www.squarewidget.com/pubsub-using-rabbitmq-with-asp.net-web-api-subscribers
+https://github.com/suadev/Asp.NetMvc.RabbitMQ/blob/master/LogMonitor/Global.asax.cs

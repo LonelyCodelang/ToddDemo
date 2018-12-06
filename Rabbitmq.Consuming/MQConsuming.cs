@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Rabbitmq.Consuming
 {
@@ -14,6 +15,10 @@ namespace Rabbitmq.Consuming
     /// </summary>
     public static class MQConsuming
     {
+        /// <summary>
+        /// http://www.squarewidget.com/pubsub-using-rabbitmq-with-asp.net-web-api-subscribers
+        /// 消息接收要调整，参考以上链接
+        /// </summary>
         public static void ReadMqMsg()
         {
             ConfigRabMq config = GetMqConfig();
@@ -27,6 +32,44 @@ namespace Rabbitmq.Consuming
                 factory.Port = config.Port;//端口
             }
 
+            while (true)
+            {
+                using (var connection = factory.CreateConnection())
+                {
+                    using (var channel = connection.CreateModel())
+                    {
+                        #region 遍历消息队列获取消息
+                        int k = 0;
+                        while (k < 2000)
+                        {
+                            BasicGetResult res = channel.BasicGet(config.QueueName, true);
+                            if (res != null)
+                            {
+                                try
+                                {
+                                    var body = System.Text.UTF8Encoding.UTF8.GetString(res.Body);
+                                    Console.WriteLine("Received {0}", body);
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            k++;
+                        }
+                        #endregion
+                    }
+                }
+                Thread.Sleep(1000 * 5);
+                Console.WriteLine("睡眠完成");
+            }
+           
+            Console.ReadLine();
+            /**    
             using (var connection = factory.CreateConnection())
             {
                 using (var channel = connection.CreateModel())
@@ -54,10 +97,36 @@ namespace Rabbitmq.Consuming
 
 
                         Console.WriteLine("Received {0}", message);
-
+                        
                     }
                 }
             }
+              **/
+
+            //using (var connection = factory.CreateConnection())
+            //using (var channel = connection.CreateModel())
+            //{
+            //    channel.QueueDeclare(queue: config.QueueName,
+            //                         durable: true,
+            //                         exclusive: false,
+            //                         autoDelete: false,
+            //                         arguments: null);
+
+            //    var consumer = new EventingBasicConsumer(channel);
+            //    consumer.Received += (model, ea) =>
+            //    {
+            //        var body = ea.Body;
+            //        var message = Encoding.UTF8.GetString(body);
+            //        Console.WriteLine(" [x] Received {0}", message);
+            //    };
+            //    channel.BasicConsume(queue: config.QueueName,
+            //                         noAck: true,
+            //                         consumer: consumer);
+
+            //    Console.WriteLine(" Press [enter] to exit.");
+            //    Console.ReadLine();
+            //}
+
         }
 
         /// <summary>
